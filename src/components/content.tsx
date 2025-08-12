@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { RxMagnifyingGlass } from "react-icons/rx";
 
 // 데이터 타입 정의
 export type DataItem = {
@@ -34,9 +35,9 @@ export type PageData = {
   total_pages: number;
 };
 
-const fetchData = async (page: number, sortBy: string) => {
+const fetchData = async (page: number, sortBy: string, query: string) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/document?page=${page}&size=20&sort_by=${sortBy}`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/document?q=${query}&page=${page}&size=20&sort_by=${sortBy}`
   );
   const data = await response.json();
   return data;
@@ -45,10 +46,10 @@ const fetchData = async (page: number, sortBy: string) => {
 export const TabContent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentTab, setCurrentTab] = useState("popular");
-
+  const [query, setQuery] = useState("");
   const { data, isLoading, error, refetch } = useQuery<PageData>({
     queryKey: ["data", currentPage, currentTab],
-    queryFn: () => fetchData(currentPage, currentTab),
+    queryFn: () => fetchData(currentPage, currentTab, query),
   });
 
   console.log("현재 페이지 데이터:", data);
@@ -67,11 +68,39 @@ export const TabContent = () => {
   return (
     <div className="flex w-full w-full max-w-[1200px] flex-col gap-6">
       <Tabs defaultValue="popular" onValueChange={handleTabChange}>
-        <TabsList className="">
-          <TabsTrigger value="popular">Popular</TabsTrigger>
-          <TabsTrigger value="trending">Trending</TabsTrigger>
+        <TabsList className="flex justify-between w-full">
+          <div className="flex justify-start ">
+            <TabsTrigger value="popular" className="text-[20px] font-semibold">
+              Popular
+            </TabsTrigger>
+            <TabsTrigger value="trending" className="text-[20px] font-semibold">
+              Trending
+            </TabsTrigger>
+          </div>
+          <div className="relative flex justify-end w-1/3 items-center">
+            <Input
+              type="email"
+              placeholder="데이터를 검색해보세요"
+              className="rounded-full border-2 border-gray-500 bg-[#f1f3f4]"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                // refetch();
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  refetch();
+                }
+              }}
+            />
+            <RxMagnifyingGlass
+              className=" text-gray-500 absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-transparent"
+              size={20}
+              onClick={() => refetch()}
+            />
+          </div>
         </TabsList>
-        <TabsContent value="popular" className="w-full max-w-[1200px] w-full">
+        <TabsContent value="popular" className="w-full max-w-[1200px] w-full ">
           <div className="w-full bg-white">
             <DataTableDemo data={data} isLoading={isLoading} />
           </div>
@@ -125,22 +154,68 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  IoCheckmarkCircleOutline,
+  IoCloseCircleOutline,
+} from "react-icons/io5";
+
+const linClamp = (text: string) => {
+  if (text.length > 36) {
+    return text.slice(0, 36) + "...";
+  }
+  return text;
+};
+
+const humanizeKo = (dateInput: string | Date, nowInput: Date = new Date()) => {
+  if (!dateInput) return "-";
+  const dt = dateInput instanceof Date ? dateInput : new Date(dateInput);
+  const now = nowInput instanceof Date ? nowInput : new Date(nowInput);
+
+  let seconds = Math.floor((now.getTime() - dt.getTime()) / 1000);
+
+  // 미래
+  if (seconds < 0) {
+    seconds = -seconds;
+    if (seconds < 60) return "곧";
+    const mins = Math.floor(seconds / 60);
+    if (mins < 60) return `${mins}분 후`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}시간 후`;
+    const days = Math.floor(hours / 24);
+    if (days < 7) return `${days}일 후`;
+    if (days < 365) return `${Math.floor(days / 7)}주 후`;
+    return `${Math.floor(days / 365)}년 후`;
+  }
+
+  // 과거
+  if (seconds < 60) return "방금 전";
+  const mins = Math.floor(seconds / 60);
+  if (mins < 60) return `${mins}분 전`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}시간 전`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}일 전`;
+  if (days < 365) return `${Math.floor(days / 7)}주 전`;
+  return `${Math.floor(days / 365)}년 전`;
+};
 
 export const columns: ColumnDef<DataItem>[] = [
   {
     accessorKey: "list_title",
     header: ({ column }) => {
-      return <div className="text-left font-medium">이름</div>;
+      return <div className="text-left font-semibold">이름</div>;
     },
     cell: ({ row }) => (
-      <div className="text-left font-medium">{row.getValue("list_title")}</div>
+      <div className="text-left font-medium">
+        {linClamp(row.getValue("list_title"))}
+      </div>
     ),
     size: 350,
   },
   {
     accessorKey: "org_nm",
     header: ({ column }) => {
-      return <div className="text-left font-medium">제공기관</div>;
+      return <div className="text-left font-semibold">제공기관</div>;
     },
     cell: ({ row }) => (
       <div className="text-left">{row.getValue("org_nm")}</div>
@@ -150,12 +225,12 @@ export const columns: ColumnDef<DataItem>[] = [
   {
     accessorKey: "token_count",
     header: ({ column }) => {
-      return <div className="text-left font-medium">토큰수</div>;
+      return <div className="text-center font-semibold">토큰수</div>;
     },
     cell: ({ row }) => {
       const tokenCount = row.getValue("token_count") as number;
       return (
-        <div className="text-left font-medium">
+        <div className="text-center font-medium">
           {tokenCount.toLocaleString()}
         </div>
       );
@@ -164,11 +239,13 @@ export const columns: ColumnDef<DataItem>[] = [
   },
   {
     accessorKey: "updated_at",
-    header: "업데이트 시간",
+    header: ({ column }) => {
+      return <div className="text-center font-semibold">업데이트 시간</div>;
+    },
     cell: ({ row }) => {
       return (
-        <div className="text-left text-sm text-muted-foreground">
-          2024-01-01
+        <div className="text-center text-sm text-muted-foreground">
+          {humanizeKo(row.getValue("updated_at"))}
         </div>
       );
     },
@@ -176,20 +253,18 @@ export const columns: ColumnDef<DataItem>[] = [
   },
   {
     accessorKey: "has_generated_doc",
-    header: "상태",
+    header: ({ column }) => {
+      return <div className="text-center font-semibold">상태</div>;
+    },
     cell: ({ row }) => {
       const hasGeneratedDoc = row.getValue("has_generated_doc") as boolean;
       return (
-        <div className="text-left">
-          <div
-            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-              hasGeneratedDoc
-                ? "bg-green-100 text-green-800"
-                : "bg-yellow-100 text-yellow-800"
-            }`}
-          >
-            {hasGeneratedDoc ? "완료" : "대기중"}
-          </div>
+        <div className="text-center flex justify-center items-center">
+          {hasGeneratedDoc ? (
+            <IoCheckmarkCircleOutline size={20} className=" text-green-500" />
+          ) : (
+            <IoCloseCircleOutline size={20} className="text-red-500" />
+          )}
         </div>
       );
     },
@@ -210,13 +285,10 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const router = useRouter();
 
   // 현재 페이지의 데이터만 표시 (마지막 페이지)
   const currentPageData = data?.items || [];
-
-  // 디버깅을 위한 로그
-  console.log("테이블 데이터:", currentPageData);
-  console.log("전체 페이지 데이터:", data);
 
   const table = useReactTable({
     data: currentPageData,
@@ -249,7 +321,7 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize"
+                    className="capitalize "
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)
@@ -274,7 +346,7 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table className="w-full">
-          <TableHeader>
+          <TableHeader className="bg-gray-100 ">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -307,7 +379,9 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  로딩 중...
+                  <Skeleton className="w-full h-24 mb-2" />
+                  <Skeleton className="w-full h-24 mb-2" />
+                  <Skeleton className="w-full h-24 mb-2" />
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
@@ -315,7 +389,10 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-gray-50"
+                  className="hover:bg-gray-50 cursor-pointer hover:text-blue-500"
+                  onClick={() => {
+                    router.push(`/${row.original.list_id}`);
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -361,6 +438,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Skeleton } from "./ui/skeleton";
+import { useRouter } from "next/navigation";
 
 interface PaginationDemoProps {
   data: any;
