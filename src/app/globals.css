@@ -118,3 +118,37 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* 커스텀 스크롤바 스타일 */
+.custom-scrollbar {
+  /* scrollbar-width: thin; Firefox */
+}
+
+/* Webkit 브라우저용 (Chrome, Safari, Edge) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #e0e0e0;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #2ea7ed; /* gray-400 */
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6b7280; /* gray-500 */
+}
+
+/* 상하 화살표 제거 */
+.custom-scrollbar::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* 스크롤바 모서리 */
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}

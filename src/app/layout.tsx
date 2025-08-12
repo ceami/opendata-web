@@ -4,7 +4,7 @@ import "./globals.css";
 import { QueryProvider } from "./provider/query-provider";
 import { Header } from "../components/header";
 import localFont from "next/font/local";
-
+import { Toaster } from "react-hot-toast";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -37,6 +37,8 @@ export default function RootLayout({
     <html lang="ko" className={pretendard.variable}>
       <body>
         <Header />
+
+        <Toaster />
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
