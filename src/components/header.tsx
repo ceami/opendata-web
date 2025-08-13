@@ -6,11 +6,11 @@ export const Header = () => {
   const router = useRouter();
   return (
     <div className="font-bold">
-      <div className="flex justify-between text-[20px] items-center max-w-[1200px] h-[75px] mx-auto">
+      <div className="flex justify-between text-[20px] items-center max-w-[1200px] h-[75px] mx-auto transition-all duration-300">
         <div>
           <Button
             variant="outline"
-            className="bg-white text-black font-bold border-2 text-[20px] cursor-pointer h-12 py-2"
+            className="bg-white text-black font-bold border-2 text-[20px] cursor-pointer h-12 py-2 transition-colors duration-300"
             onClick={() => router.push("/")}
           >
             OPEN DATA
@@ -20,7 +20,7 @@ export const Header = () => {
           <div className="flex items-center gap-2">
             <Button
               variant="link"
-              className="underline text-[20px] px-2 font-bold cursor-pointer hover:text-blue-600"
+              className="underline text-[20px] px-2 font-bold cursor-pointer hover:text-blue-600 transition-colors duration-300"
               // onClick={() => router.push("/about")}
               // style={{ cursor: "pointer" }}
             >
@@ -28,7 +28,7 @@ export const Header = () => {
             </Button>
             <Button
               variant="link"
-              className="underline text-[20px] px-2 font-bold cursor-pointer hover:text-blue-600"
+              className="underline text-[20px] px-2 font-bold cursor-pointer hover:text-blue-600 transition-colors duration-300"
               onClick={() => router.push("/about")}
               // style={{ cursor: "pointer" }}
             >
@@ -37,7 +37,7 @@ export const Header = () => {
           </div>
           <Button
             variant="outline"
-            className="bg-[#1565c0] text-white font-bold text-[20px] cursor-pointer h-12"
+            className="bg-[#1565c0] text-white font-bold text-[20px] cursor-pointer h-12 transition-all duration-300 transition-colors"
             onClick={() => router.push("/request")}
           >
             Request docs

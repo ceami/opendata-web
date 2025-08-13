@@ -13,8 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { RxMagnifyingGlass } from "react-icons/rx";
+import { useDataTable } from "@/contexts/DataTableContext";
+import { cn } from "@/lib/utils";
 
 // 데이터 타입 정의
 export type DataItem = {
@@ -44,11 +45,17 @@ const fetchData = async (page: number, sortBy: string, query: string) => {
 };
 
 export const TabContent = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentTab, setCurrentTab] = useState("popular");
-  const [query, setQuery] = useState("");
+  const {
+    currentPage,
+    currentTab,
+    query,
+    setCurrentPage,
+    setCurrentTab,
+    setQuery,
+  } = useDataTable();
+
   const { data, isLoading, error, refetch } = useQuery<PageData>({
-    queryKey: ["data", currentPage, currentTab],
+    queryKey: ["data", currentPage, currentTab, query],
     queryFn: () => fetchData(currentPage, currentTab, query),
   });
 
@@ -65,16 +72,39 @@ export const TabContent = () => {
     setCurrentPage(1); // 탭 변경 시 첫 페이지로 리셋
   };
 
+  const handleQueryChange = (newQuery: string) => {
+    setQuery(newQuery);
+    setCurrentPage(1); // 검색 시 첫 페이지로 리셋
+  };
+
   return (
     <div className="flex w-full w-full max-w-[1200px] flex-col gap-6">
-      <Tabs defaultValue="popular" onValueChange={handleTabChange}>
+      <Tabs value={currentTab} onValueChange={handleTabChange}>
         <TabsList className="flex justify-between w-full">
           <div className="flex justify-start ">
-            <TabsTrigger value="popular" className="text-[20px] font-semibold">
+            <TabsTrigger
+              value="popular"
+              className="relative text-[20px] font-semibold data-[state=active]:text-blue-500 data-[state=active]:font-bold transition-colors duration-200 relative"
+            >
               Popular
+              <div
+                className={cn(
+                  "w-[80px] flex justify-center h-[3px] transition-colors duration-200 absolute bottom-[4px] left-1/2 -translate-x-1/2",
+                  currentTab === "popular" ? "bg-blue-500" : "bg-gray-300"
+                )}
+              />
             </TabsTrigger>
-            <TabsTrigger value="trending" className="text-[20px] font-semibold">
+            <TabsTrigger
+              value="trending"
+              className="text-[20px] font-semibold data-[state=active]:text-blue-500 data-[state=active]:font-bold transition-colors duration-200 relative"
+            >
               Trending
+              <div
+                className={cn(
+                  "w-[80px] flex justify-center h-[3px] transition-colors duration-200 absolute bottom-[4px] left-1/2 -translate-x-1/2",
+                  currentTab === "trending" ? "bg-blue-500" : "bg-gray-300"
+                )}
+              />
             </TabsTrigger>
           </div>
           <div className="relative flex justify-end w-1/3 items-center">
@@ -84,8 +114,7 @@ export const TabContent = () => {
               className="rounded-full border-2 border-gray-500 bg-[#f1f3f4]"
               value={query}
               onChange={(e) => {
-                setQuery(e.target.value);
-                // refetch();
+                handleQueryChange(e.target.value);
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -158,6 +187,7 @@ import {
   IoCheckmarkCircleOutline,
   IoCloseCircleOutline,
 } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 const linClamp = (text: string) => {
   if (text.length > 36) {
@@ -439,7 +469,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Skeleton } from "./ui/skeleton";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 interface PaginationDemoProps {
   data: any;
@@ -559,10 +589,10 @@ export function PaginationDemo({
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="text-sm text-muted-foreground">
+      {/* <div className="text-sm text-muted-foreground">
         총 {total.toLocaleString()}개 항목 중 {(currentPage - 1) * 20 + 1}-
         {Math.min(currentPage * 20, total)}번째
-      </div>
+      </div> */}
       <Pagination>
         <PaginationContent>
           <PaginationItem>
@@ -600,3 +630,13 @@ export function PaginationDemo({
     </div>
   );
 }
+
+export const Content = () => {
+  return (
+    <div className="w-full min-h-[calc(100vh-75px)] h-full mx-auto max-w-[1200px]">
+      <div id="tabContent" className="">
+        <TabContent />
+      </div>
+    </div>
+  );
+};

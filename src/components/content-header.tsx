@@ -15,7 +15,7 @@ const fetchData = async () => {
 export const ContentHeader = () => {
   return (
     <div id="headContent" className="w-full h-full">
-      <div className="flex flex-col max-w-[1200px] items-center justify-center w-full h-[248px] space-y-5">
+      <div className="flex flex-col max-w-[1200px] mx-auto items-center justify-center w-full h-[248px] space-y-5">
         <HeroSection />
         <ProgressSection />
       </div>
