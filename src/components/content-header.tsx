@@ -48,10 +48,10 @@ export const ProgressSection = () => {
       <div className="flex flex-col justify-between h-full space-y-0.5">
         <div className="flex text-gray-900 items-center font-semibold  bg-white justify-between w-full px-2">
           <span className="text-xl ">데이터 통합문서 제공</span>
-          <span className=" text-xl">{data?.success_rate}%</span>
+          <span className=" text-xl">{data?.successRate}%</span>
         </div>
         <div className="w-full px-2">
-          <Progress value={data?.success_rate} className="" />
+          <Progress value={data?.successRate} className="" />
         </div>
 
         <p className="text-xs text-gray-500 px-2 text-right ">

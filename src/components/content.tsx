@@ -19,21 +19,21 @@ import { cn } from "@/lib/utils";
 
 // 데이터 타입 정의
 export type DataItem = {
-  list_id: number;
-  list_title: string;
-  org_nm: string;
-  token_count: number;
-  has_generated_doc: boolean;
+  listId: number;
+  listTitle: string;
+  orgNm: string;
+  tokenCount: number;
+  hasGeneratedDoc: boolean;
 };
 
 export type PageData = {
-  has_next: boolean;
-  has_prev: boolean;
+  hasNext: boolean;
+  hasPrev: boolean;
   items: DataItem[];
   page: number;
   size: number;
   total: number;
-  total_pages: number;
+  totalPages: number;
 };
 
 const fetchData = async (page: number, sortBy: string, query: string) => {
@@ -231,34 +231,32 @@ const humanizeKo = (dateInput: string | Date, nowInput: Date = new Date()) => {
 
 export const columns: ColumnDef<DataItem>[] = [
   {
-    accessorKey: "list_title",
+    accessorKey: "listTitle",
     header: ({ column }) => {
       return <div className="text-left font-semibold">이름</div>;
     },
     cell: ({ row }) => (
       <div className="text-left font-medium">
-        {linClamp(row.getValue("list_title"))}
+        {linClamp(row.getValue("listTitle"))}
       </div>
     ),
     size: 350,
   },
   {
-    accessorKey: "org_nm",
+    accessorKey: "orgNm",
     header: ({ column }) => {
       return <div className="text-left font-semibold">제공기관</div>;
     },
-    cell: ({ row }) => (
-      <div className="text-left">{row.getValue("org_nm")}</div>
-    ),
+    cell: ({ row }) => <div className="text-left">{row.getValue("orgNm")}</div>,
     size: 180,
   },
   {
-    accessorKey: "token_count",
+    accessorKey: "tokenCount",
     header: ({ column }) => {
       return <div className="text-center font-semibold">토큰수</div>;
     },
     cell: ({ row }) => {
-      const tokenCount = row.getValue("token_count") as number;
+      const tokenCount = row.getValue("tokenCount") as number;
       return (
         <div className="text-center font-medium">
           {tokenCount.toLocaleString()}
@@ -268,26 +266,26 @@ export const columns: ColumnDef<DataItem>[] = [
     size: 100,
   },
   {
-    accessorKey: "updated_at",
+    accessorKey: "updatedAt",
     header: ({ column }) => {
       return <div className="text-center font-semibold">업데이트 시간</div>;
     },
     cell: ({ row }) => {
       return (
         <div className="text-center text-sm text-muted-foreground">
-          {humanizeKo(row.getValue("updated_at"))}
+          {humanizeKo(row.getValue("updatedAt"))}
         </div>
       );
     },
     size: 120,
   },
   {
-    accessorKey: "has_generated_doc",
+    accessorKey: "hasGeneratedDoc",
     header: ({ column }) => {
       return <div className="text-center font-semibold">상태</div>;
     },
     cell: ({ row }) => {
-      const hasGeneratedDoc = row.getValue("has_generated_doc") as boolean;
+      const hasGeneratedDoc = row.getValue("hasGeneratedDoc") as boolean;
       return (
         <div className="text-center flex justify-center items-center">
           {hasGeneratedDoc ? (
@@ -357,15 +355,15 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id === "list_title"
+                    {column.id === "listTitle"
                       ? "이름"
-                      : column.id === "org_nm"
+                      : column.id === "orgNm"
                       ? "제공기관"
-                      : column.id === "token_count"
+                      : column.id === "tokenCount"
                       ? "토큰수"
-                      : column.id === "updated_at"
+                      : column.id === "updatedAt"
                       ? "업데이트 시간"
-                      : column.id === "has_generated_doc"
+                      : column.id === "hasGeneratedDoc"
                       ? "상태"
                       : column.id}
                   </DropdownMenuCheckboxItem>
@@ -421,7 +419,7 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:bg-gray-50 cursor-pointer hover:text-blue-500"
                   onClick={() => {
-                    router.push(`/${row.original.list_id}`);
+                    router.push(`/${row.original.listId}`);
                   }}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -484,7 +482,7 @@ export function PaginationDemo({
   onPageChange,
   isLoading,
 }: PaginationDemoProps) {
-  const totalPages = data?.total_pages || 1;
+  const totalPages = data?.totalPages || 1;
   const total = data?.total || 0;
 
   const handlePageChange = (page: number) => {

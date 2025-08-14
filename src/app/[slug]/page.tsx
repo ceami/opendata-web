@@ -43,11 +43,11 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
       <DetailHeaders
         description={data?.description}
         title={data?.title}
-        detailUrl={data?.detail_url}
+        detailUrl={data?.detailUrl}
       />
       <DetailContent
         markdownText={data?.markdown}
-        tokenCount={data?.token_count}
+        tokenCount={data?.tokenCount}
       />
     </div>
   );
