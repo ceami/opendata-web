@@ -101,36 +101,29 @@ export const DetailHeaders = ({
     { label: "관리부서명", value: deptNm || "-" },
     { label: "비용부과유무", value: isCharged || "-" },
     { label: "이용허락범위", value: permission || "-" },
-    {
-      label: "등록일",
-      value: createdAt ? new Date(createdAt).toLocaleDateString("ko-KR") : "-",
-    },
-    {
-      label: "수정일",
-      value: updatedAt ? new Date(updatedAt).toLocaleDateString("ko-KR") : "-",
-    },
   ];
 
   return (
-    <div className="w-full h-auto px-8 py-6 rounded-md border border-blue-500 border-px">
+    <div className="w-full h-auto  space-y-4  ">
       <div>
         <StatusBadge variant="API">오픈 API</StatusBadge>
       </div>
-      <div className="flex justify-between items-center">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold">{listTitle}</h1>
-          <IoCopyOutline className="inline-block ml-2" />
+      <div className="flex justify-between relative">
+        <div className="flex flex-col justify-between">
+          <div className="flex items-center ">
+            <h1 className="text-[24px] font-bold">{listTitle}</h1>
+            <IoCopyOutline size={24} className="inline-block ml-2" />
+          </div>
+          <div>
+            <a
+              href={detailUrl}
+              className="text-blue-600 text-[20px] hover:text-blue-800 underline"
+            >
+              {detailUrl}
+            </a>
+          </div>
         </div>
-        <div className="">뱃지(생성완료)</div>
-      </div>
-
-      <div>
-        <a
-          href={detailUrl}
-          className="text-blue-600 hover:text-blue-800 underline"
-        >
-          {detailUrl}
-        </a>
+        <div className="place-items-start">뱃지(생성완료)</div>
       </div>
 
       <div className="flex items-center justify-end">
@@ -143,20 +136,20 @@ export const DetailHeaders = ({
       </div>
 
       <div>
-        <p>설명</p>
+        <p className="text-md font-semibold">설명</p>
         <div className="ml-2 ">{description || "설명이 없습니다."}</div>
-        <div className="flex">
-          <p className="min-w-[60px]">키워드 :</p>
-          <div className="flex flex-wrap gap-1 ml-2">
-            {keywords?.map((keyword: string, index: number) => (
-              <span
-                key={index}
-                className="bg-[#f1f3f4] text-black border border-[#a6a9ac] border-px px-2 py-1 rounded text-sm"
-              >
-                {keyword}
-              </span>
-            )) || <span>키워드가 없습니다.</span>}
-          </div>
+      </div>
+      <div className="flex items-center">
+        <p className="min-w-[60px]">키워드 :</p>
+        <div className="flex flex-wrap  gap-1 ml-2">
+          {keywords?.map((keyword: string, index: number) => (
+            <span
+              key={index}
+              className="bg-[#f1f3f4] text-black border border-[#a6a9ac] border-px px-2 py-1 rounded"
+            >
+              {keyword}
+            </span>
+          )) || <span>키워드가 없습니다.</span>}
         </div>
       </div>
     </div>
@@ -178,17 +171,14 @@ const Table = ({
           return rows;
         }, [] as [any, any][])
         .map((pair, rowIndex) => (
-          <div
-            key={rowIndex}
-            className="flex border border-b border-[#e6e6e7] "
-          >
-            <div className="w-1/4 bg-[#b7d8ff] p-2 text-center text-[#06168d]">
+          <div key={rowIndex} className="flex border border-b border-white">
+            <div className="w-1/4 bg-[#f1f3f4] p-2 text-center text-[black]">
               {pair[0].label}
             </div>
             <div className="w-1/4 p-2 ">{pair[0].value || "-"}</div>
             {pair[1] ? (
               <>
-                <div className="w-1/4 bg-[#b7d8ff] p-2 text-center text-[#06168d]">
+                <div className="w-1/4 bg-[#f1f3f4] p-2 text-center text-[black]">
                   {pair[1].label}
                 </div>
                 <div className="w-1/4 p-2">{pair[1].value}</div>
