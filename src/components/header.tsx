@@ -3,6 +3,7 @@ import React, { use } from "react";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { IoAdd } from "react-icons/io5";
 export const Header = () => {
   const router = useRouter();
   return (
@@ -24,26 +25,29 @@ export const Header = () => {
             <Button
               variant="link"
               className="underline text-[20px] px-2 font-bold cursor-pointer hover:text-blue-600 transition-colors duration-300"
-              // onClick={() => router.push("/about")}
+              onClick={() =>
+                window.open("/https://smithery.ai/server/@iosif2/open-data-mcp")
+              }
               // style={{ cursor: "pointer" }}
             >
-              MCP Server
+              MCP 설치
             </Button>
-            <Button
+            {/* <Button
               variant="link"
               className="underline text-[20px] px-2 font-bold cursor-pointer hover:text-blue-600 transition-colors duration-300"
               onClick={() => router.push("/about")}
               // style={{ cursor: "pointer" }}
             >
               About us
-            </Button>
+            </Button> */}
           </div>
           <Button
             variant="outline"
-            className="bg-[#1565c0] text-white font-bold text-[20px] cursor-pointer h-12 transition-all duration-300 transition-colors"
+            className="bg-[#1565c0] text-white font-bold  cursor-pointer h-10  duration-300 transition-colors"
             onClick={() => router.push("/request")}
           >
-            Request docs
+            <IoAdd className="mr-1" />
+            문서 요청
           </Button>
         </div>
       </div>

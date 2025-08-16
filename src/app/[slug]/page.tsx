@@ -1,4 +1,5 @@
 "use client";
+import { StatusBadge } from "@/components/statusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
@@ -6,7 +7,8 @@ import React from "react";
 import toast from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
-
+import { IoCopyOutline } from "react-icons/io5";
+import { create } from "domain";
 const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = React.use(params);
 
@@ -38,12 +40,21 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
     enabled: !!slug, // slug가 있을 때만 쿼리 실행
   });
 
+  console.log(data);
+
   return (
     <div className="w-full h-full max-w-[1200px] mx-auto space-y-8 ">
       <DetailHeaders
         description={data?.description}
-        title={data?.title}
+        listTitle={data?.listTitle}
         detailUrl={data?.detailUrl}
+        orgNm={data?.orgNm}
+        deptNm={data?.deptNm}
+        isCharged={data?.isCharged}
+        permission={data?.permission}
+        createdAt={data?.createdAt}
+        updatedAt={data?.updatedAt}
+        keywords={data?.keywords}
       />
       <DetailContent
         markdownText={data?.markdown}
@@ -57,23 +68,136 @@ export default DetailPage;
 
 export const DetailHeaders = ({
   description,
-  title,
+  listTitle,
   detailUrl,
+  orgNm,
+  deptNm,
+  isCharged,
+  permission,
+  createdAt,
+  updatedAt,
+  keywords = [],
 }: {
   description: string;
-  title: string;
+  listTitle: string;
   detailUrl: string;
+  orgNm: string;
+  deptNm: string;
+  isCharged: boolean;
+  permission: string;
+  createdAt: string;
+  updatedAt: string;
+  keywords?: string[];
+}) => {
+  const createdAtDate = createdAt
+    ? new Date(createdAt).toLocaleDateString("ko-KR")
+    : "-";
+  const updatedAtDate = updatedAt
+    ? new Date(updatedAt).toLocaleDateString("ko-KR")
+    : "-";
+
+  const tableData = [
+    { label: "제공기관", value: orgNm || "-" },
+    { label: "관리부서명", value: deptNm || "-" },
+    { label: "비용부과유무", value: isCharged || "-" },
+    { label: "이용허락범위", value: permission || "-" },
+    {
+      label: "등록일",
+      value: createdAt ? new Date(createdAt).toLocaleDateString("ko-KR") : "-",
+    },
+    {
+      label: "수정일",
+      value: updatedAt ? new Date(updatedAt).toLocaleDateString("ko-KR") : "-",
+    },
+  ];
+
+  return (
+    <div className="w-full h-auto px-8 py-6 rounded-md border border-blue-500 border-px">
+      <div>
+        <StatusBadge variant="API">오픈 API</StatusBadge>
+      </div>
+      <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-bold">{listTitle}</h1>
+          <IoCopyOutline className="inline-block ml-2" />
+        </div>
+        <div className="">뱃지(생성완료)</div>
+      </div>
+
+      <div>
+        <a
+          href={detailUrl}
+          className="text-blue-600 hover:text-blue-800 underline"
+        >
+          {detailUrl}
+        </a>
+      </div>
+
+      <div className="flex items-center justify-end">
+        등록일: {createdAtDate}
+        (마지막업데이트: {updatedAtDate && `${updatedAtDate}`})
+      </div>
+
+      <div>
+        <Table tableData={tableData} />
+      </div>
+
+      <div>
+        <p>설명</p>
+        <div className="ml-2 ">{description || "설명이 없습니다."}</div>
+        <div className="flex">
+          <p className="min-w-[60px]">키워드 :</p>
+          <div className="flex flex-wrap gap-1 ml-2">
+            {keywords?.map((keyword: string, index: number) => (
+              <span
+                key={index}
+                className="bg-[#f1f3f4] text-black border border-[#a6a9ac] border-px px-2 py-1 rounded text-sm"
+              >
+                {keyword}
+              </span>
+            )) || <span>키워드가 없습니다.</span>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Table = ({
+  tableData,
+}: {
+  tableData: { label: string; value: string }[];
 }) => {
   return (
-    <div className=" w-full h-auto px-8 py-6 rounded-md border border-blue-500 border-px">
-      <h1 className="text-2xl font-bold">{title}</h1>
-      <p className="text-gray-700">{description}</p>
-      <a
-        href={detailUrl}
-        className="text-blue-600 hover:text-blue-800 underline"
-      >
-        자세히 보기
-      </a>
+    <div className="my-2 w-full text-sm">
+      {tableData
+        .reduce((rows, item, index) => {
+          if (index % 2 === 0) {
+            rows.push([item, tableData[index + 1] || null]);
+          }
+          return rows;
+        }, [] as [any, any][])
+        .map((pair, rowIndex) => (
+          <div
+            key={rowIndex}
+            className="flex border border-b border-[#e6e6e7] "
+          >
+            <div className="w-1/4 bg-[#b7d8ff] p-2 text-center text-[#06168d]">
+              {pair[0].label}
+            </div>
+            <div className="w-1/4 p-2 ">{pair[0].value || "-"}</div>
+            {pair[1] ? (
+              <>
+                <div className="w-1/4 bg-[#b7d8ff] p-2 text-center text-[#06168d]">
+                  {pair[1].label}
+                </div>
+                <div className="w-1/4 p-2">{pair[1].value}</div>
+              </>
+            ) : (
+              <div className="w-1/2 p-2 text-center">{pair[0].value}</div>
+            )}
+          </div>
+        ))}
     </div>
   );
 };

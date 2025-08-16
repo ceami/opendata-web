@@ -24,6 +24,7 @@ export type DataItem = {
   orgNm: string;
   tokenCount: number;
   hasGeneratedDoc: boolean;
+  dataType: string;
 };
 
 export type PageData = {
@@ -41,6 +42,7 @@ const fetchData = async (page: number, sortBy: string, query: string) => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/document?q=${query}&page=${page}&size=20&sort_by=${sortBy}`
   );
   const data = await response.json();
+  console.log("API 응답 데이터:", data);
   return data;
 };
 
@@ -58,6 +60,32 @@ export const TabContent = () => {
     queryKey: ["data", currentPage, currentTab, query],
     queryFn: () => fetchData(currentPage, currentTab, query),
   });
+  // const data = {
+  //   items: [
+  //     {
+  //       listId: 3046071,
+  //       listTitle: "국민연금공단_국민연금 가입 사업장 내역",
+  //       orgNm: "국민연금공단",
+  //       tokenCount: 803,
+  //       hasGeneratedDoc: true,
+  //       updatedAt: "2025-07-24T00:00:00",
+  //       dataType: "API",
+  //     },
+  //   ],
+
+  //   total: 0,
+  //   page: 0,
+  //   size: 0,
+  //   totalPages: 0,
+  //   hasNext: true,
+  //   hasPrev: true,
+  // };
+
+  // const isLoading = false; // 데이터 로딩 상태를 나타내는 변수
+
+  // const refetch = () => {
+  //   console.log("데이터를 다시 가져옵니다...");
+  // };
 
   console.log("현재 페이지 데이터:", data);
 
@@ -251,6 +279,24 @@ export const columns: ColumnDef<DataItem>[] = [
     size: 180,
   },
   {
+    accessorKey: "dataType",
+    header: ({ column }) => {
+      return <div className="text-left font-semibold">구분</div>;
+    },
+    cell: ({ row }) => {
+      const dataType = row.getValue("dataType") as string;
+
+      return (
+        <div className="text-left">
+          <StatusBadge variant={dataType}>
+            {getVariantStyles(dataType).title}
+          </StatusBadge>
+        </div>
+      );
+    },
+    size: 100,
+  },
+  {
     accessorKey: "tokenCount",
     header: ({ column }) => {
       return <div className="text-center font-semibold">토큰수</div>;
@@ -361,6 +407,8 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
                       ? "제공기관"
                       : column.id === "tokenCount"
                       ? "토큰수"
+                      : column.id === "dataType"
+                      ? "구분"
                       : column.id === "updatedAt"
                       ? "업데이트 시간"
                       : column.id === "hasGeneratedDoc"
@@ -467,6 +515,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Skeleton } from "./ui/skeleton";
+import { getVariantStyles, StatusBadge } from "./statusBadge";
 // import { useRouter } from "next/navigation";
 
 interface PaginationDemoProps {
