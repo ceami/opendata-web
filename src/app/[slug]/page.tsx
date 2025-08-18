@@ -41,7 +41,7 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
     enabled: !!slug, // slug가 있을 때만 쿼리 실행
   });
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className="w-full h-full max-w-[1200px] mx-auto space-y-8 ">
@@ -68,7 +68,7 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
 
 export default DetailPage;
 
-export const DetailHeaders = ({
+const DetailHeaders = ({
   description,
   listTitle,
   detailUrl,
@@ -101,23 +101,27 @@ export const DetailHeaders = ({
   const tableData = [
     { label: "제공기관", value: orgNm || "-" },
     { label: "관리부서명", value: deptNm || "-" },
-    { label: "비용부과유무", value: isCharged || "-" },
+    {
+      label: "비용부과유무",
+      value:
+        typeof isCharged === "boolean" ? (isCharged ? "유료" : "무료") : "-",
+    },
     { label: "이용허락범위", value: permission || "-" },
   ];
 
   const handleShare = async () => {
-    console.log("공유 버튼 클릭됨");
+    // console.log("공유 버튼 클릭됨");
 
     // 현재 페이지 URL 가져오기
     const currentUrl = window.location.href;
-    console.log("현재 페이지 URL:", currentUrl);
+    // console.log("현재 페이지 URL:", currentUrl);
 
     try {
       // 최신 브라우저용 Clipboard API 사용
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(currentUrl);
         toast.success("페이지 링크가 클립보드에 복사되었습니다!");
-        console.log("페이지 링크 복사 성공");
+        // console.log("페이지 링크 복사 성공");
       } else {
         // 구형 브라우저용 fallback
         const textArea = document.createElement("textarea");
@@ -133,20 +137,20 @@ export const DetailHeaders = ({
           const successful = document.execCommand("copy");
           if (successful) {
             toast.success("페이지 링크가 클립보드에 복사되었습니다!");
-            console.log("페이지 링크 복사 성공");
+            // console.log("페이지 링크 복사 성공");
           } else {
             toast.error("링크 복사에 실패했습니다.");
-            console.log("링크 복사 실패");
+            // console.log("링크 복사 실패");
           }
         } catch (err) {
-          console.error("링크 복사 에러:", err);
+          // console.error("링크 복사 에러:", err);
           toast.error("링크 복사에 실패했습니다.");
         }
 
         document.body.removeChild(textArea);
       }
     } catch (err) {
-      console.error("링크 복사 중 에러 발생:", err);
+      // console.error("링크 복사 중 에러 발생:", err);
       toast.error("링크 복사에 실패했습니다.");
     }
   };
@@ -213,21 +217,25 @@ export const DetailHeaders = ({
   );
 };
 
-const Table = ({
-  tableData,
-}: {
-  tableData: { label: string; value: string }[];
-}) => {
+type TableItem = { label: string; value: string };
+const Table = ({ tableData }: { tableData: TableItem[] }) => {
   return (
     <div className="my-2 w-full text-sm">
       {tableData
-        .reduce((rows, item, index) => {
-          if (index % 2 === 0) {
-            rows.push([item, tableData[index + 1] || null]);
-          }
-          return rows;
-        }, [] as [any, any][])
-        .map((pair, rowIndex) => (
+        .reduce(
+          (
+            rows: Array<[TableItem, TableItem | null]>,
+            item: TableItem,
+            index: number
+          ) => {
+            if (index % 2 === 0) {
+              rows.push([item, tableData[index + 1] || null]);
+            }
+            return rows;
+          },
+          [] as Array<[TableItem, TableItem | null]>
+        )
+        .map((pair: [TableItem, TableItem | null], rowIndex: number) => (
           <div
             key={rowIndex}
             className="flex border border-b border-white text-[16px]"
@@ -252,7 +260,7 @@ const Table = ({
   );
 };
 
-export const DetailContent = ({
+const DetailContent = ({
   markdownText,
   tokenCount,
   createdAtDate,
@@ -264,8 +272,8 @@ export const DetailContent = ({
   const buttonCss = `border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[5px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`;
 
   const handleCopy = async () => {
-    console.log("복사 버튼 클릭됨");
-    console.log("markdownText:", markdownText);
+    // console.log("복사 버튼 클릭됨");
+    // console.log("markdownText:", markdownText);
 
     if (!markdownText) {
       toast.error("복사할 내용이 없습니다.");
@@ -277,7 +285,7 @@ export const DetailContent = ({
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(markdownText);
         toast.success("텍스트가 클립보드에 복사되었습니다!");
-        console.log("Clipboard API로 복사 성공");
+        // console.log("Clipboard API로 복사 성공");
       } else {
         // 구형 브라우저용 fallback
         const textArea = document.createElement("textarea");
@@ -293,20 +301,20 @@ export const DetailContent = ({
           const successful = document.execCommand("copy");
           if (successful) {
             toast.success("텍스트가 클립보드에 복사되었습니다!");
-            console.log("execCommand로 복사 성공");
+            // console.log("execCommand로 복사 성공");
           } else {
             toast.error("복사에 실패했습니다.");
-            console.log("execCommand 복사 실패");
+            // console.log("execCommand 복사 실패");
           }
         } catch (err) {
-          console.error("execCommand 에러:", err);
+          // console.error("execCommand 에러:", err);
           toast.error("복사에 실패했습니다.");
         }
 
         document.body.removeChild(textArea);
       }
     } catch (err) {
-      console.error("복사 중 에러 발생:", err);
+      // console.error("복사 중 에러 발생:", err);
       toast.error("복사에 실패했습니다.");
     }
   };
@@ -347,12 +355,6 @@ export const DetailContent = ({
               </Button>
             </div>
           </div>
-          {/* <div className="w-1/2 flex justify-end space-x-4">
-            <Button className={buttonCss} onClick={handleShare}>
-              공유
-            </Button>
-         
-          </div> */}
         </div>
 
         <div className="custom-scrollbar w-full h-[calc(100%-60px)]  rounded-[5px] bg-[#f1f3f4]  overflow-y-auto">
@@ -391,7 +393,10 @@ const config: Components = {
       {...props}
     />
   ),
-  code: ({ node, inline, ...props }: any) =>
+  code: ({
+    inline,
+    ...props
+  }: { inline?: boolean } & React.HTMLAttributes<HTMLElement>) =>
     inline ? (
       <code className="bg-gray-200 px-1 py-0.5 rounded text-sm" {...props} />
     ) : (
@@ -429,7 +434,7 @@ const config: Components = {
   ),
 };
 
-export const RequestDocks = () => {
+const RequestDocks = () => {
   return (
     <div>
       <form action="submit">

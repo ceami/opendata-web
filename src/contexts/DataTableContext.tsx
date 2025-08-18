@@ -35,7 +35,7 @@ export const DataTableProvider = ({
         setCurrentTab(tab || "popular");
         setQuery(searchQuery || "");
       } catch (error) {
-        console.error("Failed to restore state:", error);
+        // console.error("Failed to restore state:", error);
       }
     }
   }, []);

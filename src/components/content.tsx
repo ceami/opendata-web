@@ -44,7 +44,7 @@ const fetchData = async (page: number, sortBy: string, query: string) => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/document?q=${query}&page=${page}&size=20&sort_by=${sortBy}`
   );
   const data = await response.json();
-  console.log("API 응답 데이터:", data);
+  // console.log("API 응답 데이터:", data);
   return data;
 };
 
@@ -89,15 +89,15 @@ export const TabContent = () => {
   //   console.log("데이터를 다시 가져옵니다...");
   // };
 
-  console.log("현재 페이지 데이터:", data);
+  // console.log("현재 페이지 데이터:", data);
 
   const handlePageChange = (page: number) => {
-    console.log(`페이지 ${page}로 이동`);
+    // console.log(`페이지 ${page}로 이동`);
     setCurrentPage(page);
   };
 
   const handleTabChange = (tab: string) => {
-    console.log(`탭 변경: ${tab}`);
+    // console.log(`탭 변경: ${tab}`);
     setCurrentTab(tab);
     setCurrentPage(1); // 탭 변경 시 첫 페이지로 리셋
   };
@@ -361,7 +361,7 @@ export const columns: ColumnDef<DataItem>[] = [
 ];
 
 interface DataTableDemoProps {
-  data: any;
+  data: PageData | undefined;
   isLoading: boolean;
 }
 
@@ -533,7 +533,7 @@ import { getVariantStyles, StatusBadge } from "./statusBadge";
 // import { useRouter } from "next/navigation";
 
 interface PaginationDemoProps {
-  data: any;
+  data: PageData | undefined;
   currentPage: number;
   onPageChange: (page: number) => void;
   isLoading: boolean;
@@ -549,7 +549,7 @@ export function PaginationDemo({
   const total = data?.total || 0;
 
   const handlePageChange = (page: number) => {
-    console.log(`페이지 ${page}로 이동`);
+    // console.log(`페이지 ${page}로 이동`);
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
     }
@@ -578,8 +578,8 @@ export function PaginationDemo({
       }
     } else {
       // 현재 페이지 주변의 페이지들만 표시
-      let startPage = Math.max(1, currentPage - 2);
-      let endPage = Math.min(totalPages, currentPage + 2);
+      const startPage = Math.max(1, currentPage - 2);
+      const endPage = Math.min(totalPages, currentPage + 2);
 
       if (startPage > 1) {
         pages.push(
