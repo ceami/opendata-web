@@ -24,9 +24,18 @@ export default function RootLayout({
       <body className={inter.className}>
         <QueryProvider>
           <DataTableProvider>
-            <div className="min-h-screen flex flex-col">
+            <div
+              className="min-h-screen flex flex-col "
+              style={{
+                // 상단 0→160px 구간에서 #D8E2E7 → white로 그라데이션, 이후 전체는 white 유지
+                backgroundColor: "#ffffff",
+                backgroundImage:
+                  "linear-gradient(to bottom, #D8E2E7 0px, #ffffff 200px)",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
               <Header />
-              <main className="flex-1 pt-20 pb-32">{children}</main>
+              <main className="flex-1 pt-10 ">{children}</main>
               <Footer />
             </div>
           </DataTableProvider>

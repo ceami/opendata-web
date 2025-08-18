@@ -8,7 +8,7 @@ export const StatusBadge = ({
 }) => {
   return (
     <span
-      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+      className={`inline-flex items-center px-3 py-1 rounded-[5px] text-xs font-light ${
         getVariantStyles(variant).className
       }`}
     >
@@ -22,7 +22,8 @@ export const getVariantStyles = (variant: string) => {
     case "API":
       return {
         title: "오픈 API",
-        className: "bg-[#009689] border-[#00ddca] text-white border rounded-md",
+        className:
+          "bg-[#009689] border-[#00ddca] text-white border rounded-[5px]",
       };
     case "file":
       return {

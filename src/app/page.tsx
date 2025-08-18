@@ -6,7 +6,7 @@ import { ContentHeader } from "@/components/content-header";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full pt-10">
       <ContentHeader />
       <Content />
     </div>

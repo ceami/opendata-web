@@ -8,7 +8,8 @@ import toast from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import { IoCopyOutline } from "react-icons/io5";
-import { create } from "domain";
+import { IoCheckmarkCircleOutline } from "react-icons/io5";
+
 const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = React.use(params);
 
@@ -59,6 +60,7 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
       <DetailContent
         markdownText={data?.markdown}
         tokenCount={data?.tokenCount}
+        createdAtDate={data?.createdAt}
       />
     </div>
   );
@@ -103,6 +105,52 @@ export const DetailHeaders = ({
     { label: "이용허락범위", value: permission || "-" },
   ];
 
+  const handleShare = async () => {
+    console.log("공유 버튼 클릭됨");
+
+    // 현재 페이지 URL 가져오기
+    const currentUrl = window.location.href;
+    console.log("현재 페이지 URL:", currentUrl);
+
+    try {
+      // 최신 브라우저용 Clipboard API 사용
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(currentUrl);
+        toast.success("페이지 링크가 클립보드에 복사되었습니다!");
+        console.log("페이지 링크 복사 성공");
+      } else {
+        // 구형 브라우저용 fallback
+        const textArea = document.createElement("textarea");
+        textArea.value = currentUrl;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+          const successful = document.execCommand("copy");
+          if (successful) {
+            toast.success("페이지 링크가 클립보드에 복사되었습니다!");
+            console.log("페이지 링크 복사 성공");
+          } else {
+            toast.error("링크 복사에 실패했습니다.");
+            console.log("링크 복사 실패");
+          }
+        } catch (err) {
+          console.error("링크 복사 에러:", err);
+          toast.error("링크 복사에 실패했습니다.");
+        }
+
+        document.body.removeChild(textArea);
+      }
+    } catch (err) {
+      console.error("링크 복사 중 에러 발생:", err);
+      toast.error("링크 복사에 실패했습니다.");
+    }
+  };
+
   return (
     <div className="w-full h-auto  space-y-4  ">
       <div>
@@ -112,21 +160,28 @@ export const DetailHeaders = ({
         <div className="flex flex-col justify-between">
           <div className="flex items-center ">
             <h1 className="text-[24px] font-bold">{listTitle}</h1>
-            <IoCopyOutline size={24} className="inline-block ml-2" />
+            <IoCopyOutline
+              size={20}
+              className="inline-block ml-2  text-gray-500 cursor-pointer hover:text-gray-700"
+              onClick={handleShare}
+            />
           </div>
           <div>
             <a
               href={detailUrl}
-              className="text-blue-600 text-[20px] hover:text-blue-800 underline"
+              className="text-blue-600 text-[16px]  hover:text-blue-800 "
             >
               {detailUrl}
             </a>
           </div>
         </div>
-        <div className="place-items-start">뱃지(생성완료)</div>
+        <div className="place-items-start flex items-center gap-2  bg-[#f1f3f4] h-[30px] border  border-gray-500 border-px rounded-[5px] px-2 py-1">
+          <IoCheckmarkCircleOutline size={20} className="text-[#179301]" />
+          <p className="text-black">생성완료</p>
+        </div>
       </div>
 
-      <div className="flex items-center justify-end">
+      <div className="flex items-center text-[16px] justify-end">
         등록일: {createdAtDate}
         (마지막업데이트: {updatedAtDate && `${updatedAtDate}`})
       </div>
@@ -136,16 +191,18 @@ export const DetailHeaders = ({
       </div>
 
       <div>
-        <p className="text-md font-semibold">설명</p>
-        <div className="ml-2 ">{description || "설명이 없습니다."}</div>
+        <p className="text-[20px] font-medium">설명</p>
+        <div className="ml-2 text-[18px]">
+          {description || "설명이 없습니다."}
+        </div>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center text-[16px]">
         <p className="min-w-[60px]">키워드 :</p>
-        <div className="flex flex-wrap  gap-1 ml-2">
+        <div className="flex flex-wrap  gap-2 ml-2">
           {keywords?.map((keyword: string, index: number) => (
             <span
               key={index}
-              className="bg-[#f1f3f4] text-black border border-[#a6a9ac] border-px px-2 py-1 rounded"
+              className="bg-[#f1f3f4] text-black border  border-[#a6a9ac] border-px px-2 py-1 rounded text-[16px]"
             >
               {keyword}
             </span>
@@ -171,7 +228,10 @@ const Table = ({
           return rows;
         }, [] as [any, any][])
         .map((pair, rowIndex) => (
-          <div key={rowIndex} className="flex border border-b border-white">
+          <div
+            key={rowIndex}
+            className="flex border border-b border-white text-[16px]"
+          >
             <div className="w-1/4 bg-[#f1f3f4] p-2 text-center text-[black]">
               {pair[0].label}
             </div>
@@ -195,11 +255,13 @@ const Table = ({
 export const DetailContent = ({
   markdownText,
   tokenCount,
+  createdAtDate,
 }: {
   markdownText: string;
   tokenCount: number;
+  createdAtDate: string;
 }) => {
-  const buttonCss = `border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[10px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`;
+  const buttonCss = `border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[5px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`;
 
   const handleCopy = async () => {
     console.log("복사 버튼 클릭됨");
@@ -249,74 +311,51 @@ export const DetailContent = ({
     }
   };
 
-  const handleShare = async () => {
-    console.log("공유 버튼 클릭됨");
-
-    // 현재 페이지 URL 가져오기
-    const currentUrl = window.location.href;
-    console.log("현재 페이지 URL:", currentUrl);
-
-    try {
-      // 최신 브라우저용 Clipboard API 사용
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(currentUrl);
-        toast.success("페이지 링크가 클립보드에 복사되었습니다!");
-        console.log("페이지 링크 복사 성공");
-      } else {
-        // 구형 브라우저용 fallback
-        const textArea = document.createElement("textarea");
-        textArea.value = currentUrl;
-        textArea.style.position = "fixed";
-        textArea.style.left = "-999999px";
-        textArea.style.top = "-999999px";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-
-        try {
-          const successful = document.execCommand("copy");
-          if (successful) {
-            toast.success("페이지 링크가 클립보드에 복사되었습니다!");
-            console.log("페이지 링크 복사 성공");
-          } else {
-            toast.error("링크 복사에 실패했습니다.");
-            console.log("링크 복사 실패");
-          }
-        } catch (err) {
-          console.error("링크 복사 에러:", err);
-          toast.error("링크 복사에 실패했습니다.");
-        }
-
-        document.body.removeChild(textArea);
-      }
-    } catch (err) {
-      console.error("링크 복사 중 에러 발생:", err);
-      toast.error("링크 복사에 실패했습니다.");
-    }
+  const transformDate = (date: string) => {
+    const dateObj = new Date(date);
+    return dateObj.toLocaleDateString("ko-KR");
   };
 
   return (
     <div className="">
-      <p className="text-[16px] font-medium text-gray-500 mb-4">통합 문서</p>
-      <div className=" h-[650px] px-8 py-6 rounded-md border border-blue-500 border-px">
-        <div className="w-full flex justify-between ">
-          <p className="border border-px inline-block px-4 py-1 border-gray-300 rounded-[10px] bg-gray-100 mb-4">
-            Token: {tokenCount || 803}
-          </p>
-          <div className="w-1/2 flex justify-end space-x-4">
+      <p className="text-[16px] font-medium text-mb-4 text-grey-900">
+        표준 문서
+      </p>
+      <div className=" h-[650px] px-[25px] py-[16px] ">
+        <div className="w-full flex space-x-2 ">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center space-x-2 ">
+              <p className="border border-px inline-block px-4 py-1 border-gray-300 rounded-[5px] bg-gray-100 mb-4">
+                토큰: {tokenCount || 803}
+              </p>
+
+              <p className="border border-px inline-block px-4 py-1 border-gray-300 rounded-[5px] bg-gray-100 mb-4">
+                생성일: {transformDate(createdAtDate)}
+              </p>
+            </div>
+            <div className="flex items-center   ">
+              <Button
+                className={`group border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[5px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`}
+                onClick={handleCopy}
+                disabled={!markdownText}
+              >
+                <IoCopyOutline
+                  size={20}
+                  className="inline-block  mr-1 text-gray-500 cursor-pointer hover:text-gray-700 group-hover:text-gray-700"
+                />
+                내용 복사
+              </Button>
+            </div>
+          </div>
+          {/* <div className="w-1/2 flex justify-end space-x-4">
             <Button className={buttonCss} onClick={handleShare}>
               공유
             </Button>
-            <Button
-              className={buttonCss}
-              onClick={handleCopy}
-              disabled={!markdownText}
-            >
-              복사
-            </Button>
-          </div>
+         
+          </div> */}
         </div>
-        <div className="custom-scrollbar border border-px w-full h-[calc(100%-60px)] border-gray-300 rounded-[10px] bg-gray-100 p-4 overflow-y-auto">
+
+        <div className="custom-scrollbar w-full h-[calc(100%-60px)]  rounded-[5px] bg-[#f1f3f4]  overflow-y-auto">
           {markdownText ? (
             <ReactMarkdown components={config}>{markdownText}</ReactMarkdown>
           ) : (
@@ -325,10 +364,6 @@ export const DetailContent = ({
             </div>
           )}
         </div>
-      </div>
-      <div className="mt-20 space-y-10">
-        <RequestDocks />
-        <RequestGuide />
       </div>
     </div>
   );
@@ -415,69 +450,69 @@ export const RequestDocks = () => {
   );
 };
 
-export const RequestGuide = () => {
-  return (
-    <div className="bg-gray-50 p-6 rounded-lg border">
-      <h2 className="text-xl font-bold mb-4 text-gray-800">Guidelines</h2>
+// export const RequestGuide = () => {
+//   return (
+//     <div className="bg-gray-50 p-6 rounded-lg border">
+//       <h2 className="text-xl font-bold mb-4 text-gray-800">Guidelines</h2>
 
-      <div className="space-y-4">
-        <div className="flex items-start space-x-3">
-          <div className="w-2 h-2 rounded-full bg-green-500 mt-3 flex-shrink-0"></div>
-          <div>
-            <h3 className="text-lg font-semibold mb-2 text-gray-700">
-              Repository Requirements
-            </h3>
-            <p className="text-gray-600">
-              Use public/open source GitHub repositories with URLs in the format{" "}
-              <code className="bg-gray-200 px-2 py-1 rounded text-sm">
-                https://github.com/username/repo
-              </code>
-            </p>
-          </div>
-        </div>
+//       <div className="space-y-4">
+//         <div className="flex items-start space-x-3">
+//           <div className="w-2 h-2 rounded-full bg-green-500 mt-3 flex-shrink-0"></div>
+//           <div>
+//             <h3 className="text-lg font-semibold mb-2 text-gray-700">
+//               Repository Requirements
+//             </h3>
+//             <p className="text-gray-600">
+//               Use public/open source GitHub repositories with URLs in the format{" "}
+//               <code className="bg-gray-200 px-2 py-1 rounded text-sm">
+//                 https://github.com/username/repo
+//               </code>
+//             </p>
+//           </div>
+//         </div>
 
-        <div className="flex items-start space-x-3">
-          <div className="w-2 h-2 rounded-full bg-green-500 mt-3 flex-shrink-0"></div>
-          <div>
-            <h3 className="text-lg font-semibold mb-2 text-gray-700">
-              Supported Files
-            </h3>
-            <p className="text-gray-600 mb-2">
-              Context7 extracts code snippets only from documentation files with
-              these extensions:
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {[".md", ".mdx", ".html", ".rst", ".ipynb"].map((ext) => (
-                <span
-                  key={ext}
-                  className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm font-mono"
-                >
-                  {ext}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
+//         <div className="flex items-start space-x-3">
+//           <div className="w-2 h-2 rounded-full bg-green-500 mt-3 flex-shrink-0"></div>
+//           <div>
+//             <h3 className="text-lg font-semibold mb-2 text-gray-700">
+//               Supported Files
+//             </h3>
+//             <p className="text-gray-600 mb-2">
+//               Context7 extracts code snippets only from documentation files with
+//               these extensions:
+//             </p>
+//             <div className="flex flex-wrap gap-2">
+//               {[".md", ".mdx", ".html", ".rst", ".ipynb"].map((ext) => (
+//                 <span
+//                   key={ext}
+//                   className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm font-mono"
+//                 >
+//                   {ext}
+//                 </span>
+//               ))}
+//             </div>
+//           </div>
+//         </div>
 
-        <div className="flex items-start space-x-3">
-          <div className="w-2 h-2 rounded-full bg-green-500 mt-3 flex-shrink-0"></div>
-          <div>
-            <h3 className="text-lg font-semibold mb-2 text-gray-700">
-              Indexing Focus
-            </h3>
-            <p className="text-gray-600">
-              The system specifically targets and processes code snippets within
-              documentation while ignoring the pages that lack code snippets.
-              The system specifically targets and processes code snippets within
-              documentation while ignoring the pages that lack code snippets.
-              The system specifically targets and processes code snippets within
-              documentation while ignoring the pages that lack code snippets.
-              The system specifically targets and processes code snippets within
-              documentation while ignoring the pages that lack code snippets.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+//         <div className="flex items-start space-x-3">
+//           <div className="w-2 h-2 rounded-full bg-green-500 mt-3 flex-shrink-0"></div>
+//           <div>
+//             <h3 className="text-lg font-semibold mb-2 text-gray-700">
+//               Indexing Focus
+//             </h3>
+//             <p className="text-gray-600">
+//               The system specifically targets and processes code snippets within
+//               documentation while ignoring the pages that lack code snippets.
+//               The system specifically targets and processes code snippets within
+//               documentation while ignoring the pages that lack code snippets.
+//               The system specifically targets and processes code snippets within
+//               documentation while ignoring the pages that lack code snippets.
+//               The system specifically targets and processes code snippets within
+//               documentation while ignoring the pages that lack code snippets.
+//             </p>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };

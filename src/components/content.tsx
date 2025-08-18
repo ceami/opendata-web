@@ -16,6 +16,8 @@ import { useQuery } from "@tanstack/react-query";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import { useDataTable } from "@/contexts/DataTableContext";
 import { cn } from "@/lib/utils";
+import { BiErrorCircle } from "react-icons/bi";
+import { BiCheckCircle } from "react-icons/bi";
 
 // 데이터 타입 정의
 export type DataItem = {
@@ -106,31 +108,31 @@ export const TabContent = () => {
   };
 
   return (
-    <div className="flex w-full w-full max-w-[1200px] flex-col gap-6">
+    <div className="flex w-full w-full mt-7 max-w-[1200px] flex-col gap-6">
       <Tabs value={currentTab} onValueChange={handleTabChange}>
         <TabsList className="flex justify-between w-full">
           <div className="flex justify-start ">
             <TabsTrigger
               value="popular"
-              className="relative text-[20px] font-semibold data-[state=active]:text-blue-500 data-[state=active]:font-bold transition-colors duration-200 relative"
+              className="relative text-[18px] font-semibold transition-colors duration-200 relative"
             >
-              Popular
+              인기 요청 순
               <div
                 className={cn(
-                  "w-[80px] flex justify-center h-[3px] transition-colors duration-200 absolute bottom-[4px] left-1/2 -translate-x-1/2",
-                  currentTab === "popular" ? "bg-blue-500" : "bg-gray-300"
+                  "w-full flex justify-center  bg-black transition-colors duration-200 absolute bottom-[1px] ",
+                  currentTab === "popular" ? "h-[3px]" : " h-[1px]"
                 )}
               />
             </TabsTrigger>
             <TabsTrigger
               value="trending"
-              className="text-[20px] font-semibold data-[state=active]:text-blue-500 data-[state=active]:font-bold transition-colors duration-200 relative"
+              className="text-[18px] font-semibold transition-colors duration-200 relative"
             >
-              Trending
+              최다 요청 순
               <div
                 className={cn(
-                  "w-[80px] flex justify-center h-[3px] transition-colors duration-200 absolute bottom-[4px] left-1/2 -translate-x-1/2",
-                  currentTab === "trending" ? "bg-blue-500" : "bg-gray-300"
+                  "w-full flex justify-center  bg-black transition-colors duration-200 absolute bottom-[1px] ",
+                  currentTab === "trending" ? "h-[3px]" : " h-[1px]"
                 )}
               />
             </TabsTrigger>
@@ -139,7 +141,7 @@ export const TabContent = () => {
             <Input
               type="email"
               placeholder="데이터를 검색해보세요"
-              className="rounded-full border-2 border-gray-500 bg-[#f1f3f4]"
+              className="rounded-[12px] border-px border-gray-300 bg-[#f1f3f4]"
               value={query}
               onChange={(e) => {
                 handleQueryChange(e.target.value);
@@ -151,7 +153,7 @@ export const TabContent = () => {
               }}
             />
             <RxMagnifyingGlass
-              className=" text-gray-500 absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-transparent"
+              className=" text-black absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-transparent"
               size={20}
               onClick={() => refetch()}
             />
@@ -218,8 +220,8 @@ import {
 import { useRouter } from "next/navigation";
 
 const linClamp = (text: string) => {
-  if (text.length > 36) {
-    return text.slice(0, 36) + "...";
+  if (text.length > 27) {
+    return text.slice(0, 27) + "...";
   }
   return text;
 };
@@ -257,11 +259,21 @@ const humanizeKo = (dateInput: string | Date, nowInput: Date = new Date()) => {
   return `${Math.floor(days / 365)}년 전`;
 };
 
+const countToken = (tokenCount: number) => {
+  if (tokenCount < 1000) {
+    return tokenCount.toLocaleString();
+  } else if (tokenCount < 1000000) {
+    return (tokenCount / 1000).toFixed(1) + "K";
+  } else {
+    return (tokenCount / 1000000).toFixed(1) + "M";
+  }
+};
+
 export const columns: ColumnDef<DataItem>[] = [
   {
     accessorKey: "listTitle",
     header: ({ column }) => {
-      return <div className="text-left font-semibold">이름</div>;
+      return <div className="text-left font-medium text-[18px]">이름</div>;
     },
     cell: ({ row }) => (
       <div className="text-left font-medium">
@@ -273,15 +285,17 @@ export const columns: ColumnDef<DataItem>[] = [
   {
     accessorKey: "orgNm",
     header: ({ column }) => {
-      return <div className="text-left font-semibold">제공기관</div>;
+      return <div className="text-left font-medium text-[18px]">제공기관</div>;
     },
-    cell: ({ row }) => <div className="text-left">{row.getValue("orgNm")}</div>,
+    cell: ({ row }) => (
+      <div className="text-left font-light">{row.getValue("orgNm")}</div>
+    ),
     size: 180,
   },
   {
     accessorKey: "dataType",
     header: ({ column }) => {
-      return <div className="text-left font-semibold">구분</div>;
+      return <div className="text-left font-medium text-[18px]">구분</div>;
     },
     cell: ({ row }) => {
       const dataType = row.getValue("dataType") as string;
@@ -299,14 +313,12 @@ export const columns: ColumnDef<DataItem>[] = [
   {
     accessorKey: "tokenCount",
     header: ({ column }) => {
-      return <div className="text-center font-semibold">토큰수</div>;
+      return <div className="text-left font-medium text-[18px]">토큰수</div>;
     },
     cell: ({ row }) => {
       const tokenCount = row.getValue("tokenCount") as number;
       return (
-        <div className="text-center font-medium">
-          {tokenCount.toLocaleString()}
-        </div>
+        <div className="text-left font-light">{countToken(tokenCount)}</div>
       );
     },
     size: 100,
@@ -314,11 +326,13 @@ export const columns: ColumnDef<DataItem>[] = [
   {
     accessorKey: "updatedAt",
     header: ({ column }) => {
-      return <div className="text-center font-semibold">업데이트 시간</div>;
+      return (
+        <div className="text-center font-medium text-[18px]">업데이트</div>
+      );
     },
     cell: ({ row }) => {
       return (
-        <div className="text-center text-sm text-muted-foreground">
+        <div className="text-center text-[18px]  font-light">
           {humanizeKo(row.getValue("updatedAt"))}
         </div>
       );
@@ -328,16 +342,16 @@ export const columns: ColumnDef<DataItem>[] = [
   {
     accessorKey: "hasGeneratedDoc",
     header: ({ column }) => {
-      return <div className="text-center font-semibold">상태</div>;
+      return <div className="text-center font-medium text-[18px]">상태</div>;
     },
     cell: ({ row }) => {
       const hasGeneratedDoc = row.getValue("hasGeneratedDoc") as boolean;
       return (
         <div className="text-center flex justify-center items-center">
           {hasGeneratedDoc ? (
-            <IoCheckmarkCircleOutline size={20} className=" text-green-500" />
+            <BiCheckCircle size={20} className=" text-green-500" />
           ) : (
-            <IoCloseCircleOutline size={20} className="text-red-500" />
+            <BiErrorCircle size={20} className="text-red-500" />
           )}
         </div>
       );
@@ -420,9 +434,9 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="overflow-hidden rounded-md border">
-        <Table className="w-full">
-          <TableHeader className="bg-gray-100 ">
+      <div className="">
+        <Table className="w-full ">
+          <TableHeader className="bg-gray-100 text-[18px] font-medium  ">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -434,7 +448,7 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
                         minWidth: `${header.getSize()}px`,
                         maxWidth: `${header.getSize()}px`,
                       }}
-                      className="px-6 py-4 text-left font-medium"
+                      className=" text-left font-medium"
                     >
                       {header.isPlaceholder
                         ? null
@@ -448,7 +462,7 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="">
             {isLoading ? (
               <TableRow>
                 <TableCell
@@ -465,7 +479,7 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-gray-50 cursor-pointer hover:text-blue-500"
+                  className="cursor-pointer hover:text-blue-500 text-black"
                   onClick={() => {
                     router.push(`/${row.original.listId}`);
                   }}
@@ -478,7 +492,7 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
                         minWidth: `${cell.column.getSize()}px`,
                         maxWidth: `${cell.column.getSize()}px`,
                       }}
-                      className="px-6 py-4"
+                      className="py-3 px-2 text-[18px] "
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -680,7 +694,7 @@ export function PaginationDemo({
 
 export const Content = () => {
   return (
-    <div className="w-full min-h-[calc(100vh-75px)] h-full mx-auto max-w-[1200px]">
+    <div className="w-full min-h-[calc(100vh-300px)] h-full mx-auto max-w-[1200px]">
       <div id="tabContent" className="">
         <TabContent />
       </div>

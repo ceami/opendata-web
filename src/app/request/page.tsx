@@ -18,17 +18,17 @@ export const RequestDocks = () => {
   return (
     <div>
       <form action="submit">
-        <p className="text-gray-700 mb-4">
-          Up-to-date documentation for LLMs and AI code editors Copy the latest
-          docs and code for any library
-          <br /> — paste into Cursor, Claude, or other LLMs.
+        <p className="text-blue-500 text-[24px] font-bold mb-4">
+          새로운 문서가 있다면 요청하십시오 휴먼
         </p>
-        <div className="flex flex-col sm:flex-row gap-2 w-full">
+        <div className="flex flex-col flex-row max-w-[600px] mx-auto gap-2 w-full">
           <Input
-            placeholder="Enter your request here..."
-            className="flex-1 h-10"
+            placeholder="공공데이터포털 신규 페이지 URL을 입력하세요"
+            className="flex-1 px-[20px] py-[8px] border border-black border-1 rounded-[5px] bg-[#f1f3f4]"
           />
-          <Button className="h-10 px-6 sm:w-auto w-full">Submit</Button>
+          <Button className="sm:w-auto w-full bg-[#f1f3f4] text-black text-[16px] hover:bg-blue-500 hover:text-white border-black border-1 rounded-[5px]   ">
+            제출
+          </Button>
         </div>
       </form>
     </div>
@@ -37,68 +37,86 @@ export const RequestDocks = () => {
 
 export const RequestGuide = () => {
   return (
-    <div className="bg-gray-50 p-6 rounded-lg border">
-      <h2 className="text-xl font-bold mb-4 text-gray-800">Guidelines</h2>
+    <div className="">
+      <h2 className="text-[16px] font-medium mb-4 text-gray-800">
+        OpenData MCP 데이터 요청 가이드라인
+      </h2>
 
-      <div className="space-y-4">
-        <div className="flex items-start space-x-3">
-          <div className="w-2 h-2 rounded-full bg-green-500 mt-3 flex-shrink-0"></div>
-          <div>
-            <h3 className="text-lg font-semibold mb-2 text-gray-700">
-              Repository Requirements
-            </h3>
-            <p className="text-gray-600">
-              Use public/open source GitHub repositories with URLs in the format{" "}
-              <code className="bg-gray-200 px-2 py-1 rounded text-sm">
-                https://github.com/username/repo
-              </code>
-            </p>
-          </div>
-        </div>
+      <div className="space-y-8 text-gray-800">
+        {/* 1. 데이터 요청 유형 */}
+        <section className="">
+          <h3 className="text-lg  ">1. 데이터 요청 유형</h3>
+          <ol className=" ml-1 space-y-3">
+            <li>
+              <p className="">(1) 기존 데이터 요청</p>
+              <ul className="list-disc ml-7 text-gray-700">
+                <li>
+                  공공데이터포털에 등록된 데이터셋 중 검색을 통해 확인 가능한
+                  경우
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p className="">(2) 신규 데이터 요청</p>
+              <ul className="list-disc ml-7 text-gray-700">
+                <li>검색 시 해당 데이터셋이 존재하지 않는 경우</li>
+                <li>
+                  공공데이터포털에 존재하지만, 본 사이트에 등록되지 않은
+                  데이터의 신규 개방 요청
+                </li>
+              </ul>
+            </li>
+          </ol>
+        </section>
 
-        <div className="flex items-start space-x-3">
-          <div className="w-2 h-2 rounded-full bg-green-500 mt-3 flex-shrink-0"></div>
-          <div>
-            <h3 className="text-lg font-semibold mb-2 text-gray-700">
-              Supported Files
-            </h3>
-            <p className="text-gray-600 mb-2">
-              Context7 extracts code snippets only from documentation files with
-              these extensions:
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {[".md", ".mdx", ".html", ".rst", ".ipynb"].map((ext) => (
-                <span
-                  key={ext}
-                  className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm font-mono"
-                >
-                  {ext}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* 2. 데이터 요청 우선순위 */}
+        <section>
+          <h3 className="text-lg  ">2. 데이터 요청 우선순위</h3>
+          <ol className="ml-1 space-y-4">
+            <li>
+              <p className="">(1) 공공데이터포털(data.go.kr)</p>
+              <ul className="list-disc ml-7 text-gray-700">
+                <li>
+                  국가 및 지방자치단체, 공공기관이 제공하는 공식 오픈 데이터
+                </li>
+                <li>최우선 처리 대상</li>
+              </ul>
+            </li>
+            <li>
+              <p className="">(2) 공공데이터포털 연계 사이트</p>
+              <ul className="list-disc ml-7 text-gray-700">
+                <li>
+                  공공데이터포털 API 또는 데이터셋 연계를 통해 자료를 제공하는
+                  기관 웹사이트
+                </li>
+                <li>
+                  공공데이터포털을 통해 접근 가능하거나 포털 메타데이터에서
+                  출처로 확인되는 경우 포함
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p className="">(3) 외부 사이트</p>
+              <ul className="list-disc ml-7 text-gray-700">
+                <li>
+                  공공데이터포털과 직접 연계되지 않은 민간/기관 웹사이트 (예: AI
+                  Hub, KOSIS 등)
+                </li>
+                <li>
+                  현재 기능 준비 중으로 추후 지원 예정이며, 공지사항을 통해 안내
+                </li>
+              </ul>
+            </li>
+          </ol>
+        </section>
 
-        <div className="flex items-start space-x-3">
-          <div className="w-2 h-2 rounded-full bg-green-500 mt-3 flex-shrink-0"></div>
-          <div>
-            <h3 className="text-lg font-semibold mb-2 text-gray-700">
-              Indexing Focus
-            </h3>
-            <p className="text-gray-600">
-              The system specifically targets and processes code snippets within
-              documentation while ignoring the pages that lack code snippets.
-              The system specifically targets and processes code snippets within
-              documentation while ignoring the pages that lack code snippets.
-              The system specifically targets and processes code snippets within
-              documentation while ignoring the pages that lack code snippets.
-              The system specifically targets and processes code snippets within
-              documentation while ignoring the pages that lack code snippets.
-              The system specifically targets and processes code snippets within
-              documentation while ignoring the pages that lack code snippets.
-            </p>
-          </div>
-        </div>
+        {/* 3. 검토 및 처리 */}
+        <section>
+          <h3 className="text-lg  ">3. 검토 및 처리</h3>
+          <ul className="list-disc ml-7 text-gray-700">
+            <li>우선순위에 따라 담당 부서에서 검토 후 처리 결과 안내</li>
+          </ul>
+        </section>
       </div>
     </div>
   );
