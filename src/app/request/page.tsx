@@ -19,7 +19,7 @@ export const RequestDocks = () => {
     <div>
       <form action="submit">
         <p className="text-blue-500 text-[24px] font-bold mb-4">
-          새로운 문서가 있다면 요청하십시오 휴먼
+          새로운 문서가 있다면 요청하세요
         </p>
         <div className="flex flex-col flex-row max-w-[600px] mx-auto gap-2 w-full">
           <Input
@@ -38,7 +38,7 @@ export const RequestDocks = () => {
 export const RequestGuide = () => {
   return (
     <div className="">
-      <h2 className="text-[16px] font-medium mb-4 text-gray-800">
+      <h2 className="text-[20px] font-medium mb-4 text-gray-800">
         OpenData MCP 데이터 요청 가이드라인
       </h2>
 

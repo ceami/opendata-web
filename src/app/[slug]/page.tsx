@@ -2,13 +2,23 @@
 import { StatusBadge } from "@/components/statusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import React from "react";
 import toast from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import { IoCopyOutline } from "react-icons/io5";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
+import { BiCheckCircle, BiErrorCircle } from "react-icons/bi";
+
+const formatDate = (dateStr: string) => {
+  if (!dateStr) return "-";
+  const date = new Date(dateStr);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`.replace(/\.$/, ""); // Remove trailing period if exists
+};
 
 const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = React.use(params);
@@ -41,7 +51,7 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
     enabled: !!slug, // slug가 있을 때만 쿼리 실행
   });
 
-  // console.log(data);
+  console.log(data);
 
   return (
     <div className="w-full h-full max-w-[1200px] mx-auto space-y-8 ">
@@ -56,6 +66,7 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
         createdAt={data?.createdAt}
         updatedAt={data?.updatedAt}
         keywords={data?.keywords}
+        generatedStatus={data?.generatedStatus}
       />
       <DetailContent
         markdownText={data?.markdown}
@@ -79,6 +90,7 @@ const DetailHeaders = ({
   createdAt,
   updatedAt,
   keywords = [],
+  generatedStatus,
 }: {
   description: string;
   listTitle: string;
@@ -90,13 +102,10 @@ const DetailHeaders = ({
   createdAt: string;
   updatedAt: string;
   keywords?: string[];
+  generatedStatus?: boolean;
 }) => {
-  const createdAtDate = createdAt
-    ? new Date(createdAt).toLocaleDateString("ko-KR")
-    : "-";
-  const updatedAtDate = updatedAt
-    ? new Date(updatedAt).toLocaleDateString("ko-KR")
-    : "-";
+  const createdAtDate = createdAt ? formatDate(createdAt) : "-";
+  const updatedAtDate = updatedAt ? formatDate(updatedAt) : "-";
 
   const tableData = [
     { label: "제공기관", value: orgNm || "-" },
@@ -155,8 +164,29 @@ const DetailHeaders = ({
     }
   };
 
+  const GeneratedStatus = ({
+    generatedStatus,
+  }: {
+    generatedStatus?: boolean;
+  }) => {
+    console.log(generatedStatus);
+    return generatedStatus ? (
+      <div className="place-items-start flex items-center gap-2  bg-[#f1f3f4] h-[30px] border  border-gray-500 border-px rounded-[5px] px-2 py-1">
+        <BiCheckCircle size={20} className="text-green-500" />
+        <p className="text-black">생성완료</p>
+      </div>
+    ) : (
+      <div className="place-items-start flex items-center gap-2  bg-[#f1f3f4] h-[30px] border  border-gray-500 border-px rounded-[5px] px-2 py-1">
+        <BiErrorCircle size={20} className="text-red-500" />
+        <p className="text-black">생성안됨</p>
+      </div>
+    );
+  };
+
+  // const isGenerated = generatedStatus
+
   return (
-    <div className="w-full h-auto  space-y-4  ">
+    <div className="w-full h-auto  space-y-4   border border-gray-300 rounded-[5px] bg-white  px-5 py-4">
       <div>
         <StatusBadge variant="API">오픈 API</StatusBadge>
       </div>
@@ -171,37 +201,29 @@ const DetailHeaders = ({
             />
           </div>
           <div>
-            <a
-              href={detailUrl}
-              className="text-blue-600 text-[16px]  hover:text-blue-800 "
+            <button
+              onClick={() => window.open(detailUrl, "_blank")}
+              className="text-blue-600 text-[16px] cursor-pointer  hover:text-blue-800 "
             >
               {detailUrl}
-            </a>
+            </button>
           </div>
         </div>
-        <div className="place-items-start flex items-center gap-2  bg-[#f1f3f4] h-[30px] border  border-gray-500 border-px rounded-[5px] px-2 py-1">
-          <IoCheckmarkCircleOutline size={20} className="text-[#179301]" />
-          <p className="text-black">생성완료</p>
-        </div>
+        <GeneratedStatus generatedStatus={generatedStatus} />
       </div>
 
-      <div className="flex items-center text-[16px] justify-end">
+      <div className="flex items-center text-[16px] justify-end py-2">
         등록일: {createdAtDate}
-        (마지막업데이트: {updatedAtDate && `${updatedAtDate}`})
+        (마지막 업데이트: {updatedAtDate && `${updatedAtDate}`})
       </div>
+
+      <div className="text-[18px] ">{description || "설명이 없습니다."}</div>
 
       <div>
         <Table tableData={tableData} />
       </div>
 
-      <div>
-        <p className="text-[20px] font-medium">설명</p>
-        <div className="ml-2 text-[18px]">
-          {description || "설명이 없습니다."}
-        </div>
-      </div>
       <div className="flex items-center text-[16px]">
-        <p className="min-w-[60px]">키워드 :</p>
         <div className="flex flex-wrap  gap-2 ml-2">
           {keywords?.map((keyword: string, index: number) => (
             <span
@@ -240,13 +262,13 @@ const Table = ({ tableData }: { tableData: TableItem[] }) => {
             key={rowIndex}
             className="flex border border-b border-white text-[16px]"
           >
-            <div className="w-1/4 bg-[#f1f3f4] p-2 text-center text-[black]">
+            <div className="w-1/5 bg-[#f1f3f4] p-2 text-center text-[black]">
               {pair[0].label}
             </div>
             <div className="w-1/4 p-2 ">{pair[0].value || "-"}</div>
             {pair[1] ? (
               <>
-                <div className="w-1/4 bg-[#f1f3f4] p-2 text-center text-[black]">
+                <div className="w-1/5 bg-[#f1f3f4] p-2 text-center text-[black]">
                   {pair[1].label}
                 </div>
                 <div className="w-1/4 p-2">{pair[1].value}</div>
@@ -269,6 +291,26 @@ const DetailContent = ({
   tokenCount: number;
   createdAtDate: string;
 }) => {
+  const { isPending, isError, mutate } = useMutation({
+    mutationKey: ["documentRequest"],
+    mutationFn: async () => {
+      // console.log("문서 요청 API 호출");
+      // 실제 API 호출 로직을 여기에 작성
+      // 예시로 2초 후에 성공하는 Promise를 반환
+      return new Promise((resolve) => setTimeout(resolve, 2000));
+    },
+    onSuccess: () => {
+      console.log("문서 요청 성공");
+    },
+    onError: (error) => {
+      console.error("문서 요청 실패:", error);
+    },
+  });
+
+  const handleClick = () => {
+    console.log("클릭");
+  };
+
   const buttonCss = `border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[5px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`;
 
   const handleCopy = async () => {
@@ -321,20 +363,32 @@ const DetailContent = ({
 
   const transformDate = (date: string) => {
     const dateObj = new Date(date);
-    return dateObj.toLocaleDateString("ko-KR");
+    const transDate = formatDate(dateObj.toLocaleDateString("ko-KR"));
+
+    return transDate;
+  };
+
+  const countToken = (tokenCount: number) => {
+    if (tokenCount < 1000) {
+      return tokenCount.toLocaleString();
+    } else if (tokenCount < 1000000) {
+      return (tokenCount / 1000).toFixed(1) + "K";
+    } else {
+      return (tokenCount / 1000000).toFixed(1) + "M";
+    }
   };
 
   return (
-    <div className="">
-      <p className="text-[16px] font-medium text-mb-4 text-grey-900">
+    <div className="border border-gray-300 rounded-[5px] bg-white  px-5 py-4">
+      <p className="text-[20px] font-medium text-mb-4 text-grey-900 py-[11px] ">
         표준 문서
       </p>
-      <div className=" h-[650px] px-[25px] py-[16px] ">
+      <div className=" h-[650px]  ">
         <div className="w-full flex space-x-2 ">
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-between w-full ">
             <div className="flex items-center space-x-2 ">
               <p className="border border-px inline-block px-4 py-1 border-gray-300 rounded-[5px] bg-gray-100 mb-4">
-                토큰: {tokenCount || 803}
+                토큰: {countToken(tokenCount) ?? 0}
               </p>
 
               <p className="border border-px inline-block px-4 py-1 border-gray-300 rounded-[5px] bg-gray-100 mb-4">
@@ -360,6 +414,15 @@ const DetailContent = ({
         <div className="custom-scrollbar w-full h-[calc(100%-60px)]  rounded-[5px] bg-[#f1f3f4]  overflow-y-auto">
           {markdownText ? (
             <ReactMarkdown components={config}>{markdownText}</ReactMarkdown>
+          ) : markdownText === null ? (
+            <div className="  w-full h-full items-center text-center flex flex-col justify-center  ">
+              <Button
+                className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 cursor-pointer"
+                onClick={() => handleClick()}
+              >
+                문서 요청하기
+              </Button>
+            </div>
           ) : (
             <div className="text-gray-500 text-center py-8">
               문서 내용을 불러오는 중입니다...
@@ -433,91 +496,3 @@ const config: Components = {
     <hr className="my-6 border-gray-300" {...props} />
   ),
 };
-
-const RequestDocks = () => {
-  return (
-    <div>
-      <form action="submit">
-        <p className="text-gray-700 mb-4">
-          Up-to-date documentation for LLMs and AI code editors Copy the latest
-          docs and code for any library
-          <br /> — paste into Cursor, Claude, or other LLMs.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-2 w-full">
-          <Input
-            placeholder="Enter your request here..."
-            className="flex-1 h-10"
-          />
-          <Button className="h-10 px-6 sm:w-auto w-full">Submit</Button>
-        </div>
-      </form>
-    </div>
-  );
-};
-
-// export const RequestGuide = () => {
-//   return (
-//     <div className="bg-gray-50 p-6 rounded-lg border">
-//       <h2 className="text-xl font-bold mb-4 text-gray-800">Guidelines</h2>
-
-//       <div className="space-y-4">
-//         <div className="flex items-start space-x-3">
-//           <div className="w-2 h-2 rounded-full bg-green-500 mt-3 flex-shrink-0"></div>
-//           <div>
-//             <h3 className="text-lg font-semibold mb-2 text-gray-700">
-//               Repository Requirements
-//             </h3>
-//             <p className="text-gray-600">
-//               Use public/open source GitHub repositories with URLs in the format{" "}
-//               <code className="bg-gray-200 px-2 py-1 rounded text-sm">
-//                 https://github.com/username/repo
-//               </code>
-//             </p>
-//           </div>
-//         </div>
-
-//         <div className="flex items-start space-x-3">
-//           <div className="w-2 h-2 rounded-full bg-green-500 mt-3 flex-shrink-0"></div>
-//           <div>
-//             <h3 className="text-lg font-semibold mb-2 text-gray-700">
-//               Supported Files
-//             </h3>
-//             <p className="text-gray-600 mb-2">
-//               Context7 extracts code snippets only from documentation files with
-//               these extensions:
-//             </p>
-//             <div className="flex flex-wrap gap-2">
-//               {[".md", ".mdx", ".html", ".rst", ".ipynb"].map((ext) => (
-//                 <span
-//                   key={ext}
-//                   className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm font-mono"
-//                 >
-//                   {ext}
-//                 </span>
-//               ))}
-//             </div>
-//           </div>
-//         </div>
-
-//         <div className="flex items-start space-x-3">
-//           <div className="w-2 h-2 rounded-full bg-green-500 mt-3 flex-shrink-0"></div>
-//           <div>
-//             <h3 className="text-lg font-semibold mb-2 text-gray-700">
-//               Indexing Focus
-//             </h3>
-//             <p className="text-gray-600">
-//               The system specifically targets and processes code snippets within
-//               documentation while ignoring the pages that lack code snippets.
-//               The system specifically targets and processes code snippets within
-//               documentation while ignoring the pages that lack code snippets.
-//               The system specifically targets and processes code snippets within
-//               documentation while ignoring the pages that lack code snippets.
-//               The system specifically targets and processes code snippets within
-//               documentation while ignoring the pages that lack code snippets.
-//             </p>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };

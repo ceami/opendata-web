@@ -25,10 +25,11 @@ export const getVariantStyles = (variant: string) => {
         className:
           "bg-[#009689] border-[#00ddca] text-white border rounded-[5px]",
       };
-    case "file":
+    case "FILE":
       return {
-        title: "파일",
-        className: "bg-blue-100 text-blue-800",
+        title: "파일 데이터",
+        className:
+          "bg-[#FE9A00] border-[#FFC66F] text-white border rounded-[5px]",
       };
     default:
       return {

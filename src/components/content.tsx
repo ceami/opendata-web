@@ -1,16 +1,4 @@
-import { AppWindowIcon, CodeIcon } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { RxMagnifyingGlass } from "react-icons/rx";
@@ -18,6 +6,45 @@ import { useDataTable } from "@/contexts/DataTableContext";
 import { cn } from "@/lib/utils";
 import { BiErrorCircle } from "react-icons/bi";
 import { BiCheckCircle } from "react-icons/bi";
+import * as React from "react";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table";
+import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+
+import { BiSortAlt2 } from "react-icons/bi";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  IoCheckmarkCircleOutline,
+  IoCloseCircleOutline,
+} from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 // 데이터 타입 정의
 export type DataItem = {
@@ -38,13 +65,15 @@ export type PageData = {
   total: number;
   totalPages: number;
 };
+// page=1&size=20&sort_by=popular&name_sort_by=all&org_sort_by=all&data_type_sort_by=all&token_count_sort_by=all&status_sort_by=all
 
 const fetchData = async (page: number, sortBy: string, query: string) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/document?q=${query}&page=${page}&size=20&sort_by=${sortBy}`
+    // `${process.env.NEXT_PUBLIC_API_URL}/api/v1/document/v2?q=${query}&page=${page}&size=20&sort_by=${sortBy}`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/document/v2?q=${query}&page=${page}&size=20&sort_by=${sortBy}&name_sort_by=all&org_sort_by=all&data_type_sort_by=all&token_count_sort_by=all&status_sort_by=all`
   );
   const data = await response.json();
-  // console.log("API 응답 데이터:", data);
+  console.log("API 응답 데이터:", data);
   return data;
 };
 
@@ -108,7 +137,7 @@ export const TabContent = () => {
   };
 
   return (
-    <div className="flex w-full w-full mt-7 max-w-[1200px] flex-col gap-6">
+    <div className="flex w-full  mt-7 max-w-[1200px] flex-col gap-6">
       <Tabs value={currentTab} onValueChange={handleTabChange}>
         <TabsList className="flex justify-between w-full">
           <div className="flex justify-start ">
@@ -116,7 +145,7 @@ export const TabContent = () => {
               value="popular"
               className="relative text-[18px] font-semibold transition-colors duration-200 relative"
             >
-              인기 요청 순
+              인기순
               <div
                 className={cn(
                   "w-full flex justify-center  bg-black transition-colors duration-200 absolute bottom-[1px] ",
@@ -128,7 +157,7 @@ export const TabContent = () => {
               value="trending"
               className="text-[18px] font-semibold transition-colors duration-200 relative"
             >
-              최다 요청 순
+              최신순
               <div
                 className={cn(
                   "w-full flex justify-center  bg-black transition-colors duration-200 absolute bottom-[1px] ",
@@ -180,48 +209,9 @@ export const TabContent = () => {
   );
 };
 
-import * as React from "react";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  IoCheckmarkCircleOutline,
-  IoCloseCircleOutline,
-} from "react-icons/io5";
-import { useRouter } from "next/navigation";
-
-const linClamp = (text: string) => {
-  if (text.length > 27) {
-    return text.slice(0, 27) + "...";
+const linClamp = (text: string, maxCount: number) => {
+  if (text?.length > maxCount) {
+    return text.slice(0, maxCount) + "...";
   }
   return text;
 };
@@ -276,8 +266,8 @@ export const columns: ColumnDef<DataItem>[] = [
       return <div className="text-left font-medium text-[18px]">이름</div>;
     },
     cell: ({ row }) => (
-      <div className="text-left font-medium">
-        {linClamp(row.getValue("listTitle"))}
+      <div className="text-left font-medium ">
+        {linClamp(row.getValue("listTitle"), 27)}
       </div>
     ),
     size: 350,
@@ -288,20 +278,22 @@ export const columns: ColumnDef<DataItem>[] = [
       return <div className="text-left font-medium text-[18px]">제공기관</div>;
     },
     cell: ({ row }) => (
-      <div className="text-left font-light">{row.getValue("orgNm")}</div>
+      <div className=" line-clamp-1 text-left font-light">
+        {linClamp(row.getValue("orgNm"), 13)}
+      </div>
     ),
     size: 180,
   },
   {
     accessorKey: "dataType",
     header: ({ column }) => {
-      return <div className="text-left font-medium text-[18px]">구분</div>;
+      return <div className="text-center font-medium text-[18px]">구분</div>;
     },
     cell: ({ row }) => {
       const dataType = row.getValue("dataType") as string;
 
       return (
-        <div className="text-left">
+        <div className="text-center">
           <StatusBadge variant={dataType}>
             {getVariantStyles(dataType).title}
           </StatusBadge>
@@ -313,12 +305,12 @@ export const columns: ColumnDef<DataItem>[] = [
   {
     accessorKey: "tokenCount",
     header: ({ column }) => {
-      return <div className="text-left font-medium text-[18px]">토큰수</div>;
+      return <div className="text-center font-medium text-[18px]">토큰수</div>;
     },
     cell: ({ row }) => {
       const tokenCount = row.getValue("tokenCount") as number;
       return (
-        <div className="text-left font-light">{countToken(tokenCount)}</div>
+        <div className="text-center font-light">{countToken(tokenCount)}</div>
       );
     },
     size: 100,
@@ -337,7 +329,7 @@ export const columns: ColumnDef<DataItem>[] = [
         </div>
       );
     },
-    size: 120,
+    size: 100,
   },
   {
     accessorKey: "hasGeneratedDoc",
@@ -356,7 +348,7 @@ export const columns: ColumnDef<DataItem>[] = [
         </div>
       );
     },
-    size: 80,
+    size: 100,
   },
 ];
 
@@ -448,7 +440,7 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
                         minWidth: `${header.getSize()}px`,
                         maxWidth: `${header.getSize()}px`,
                       }}
-                      className=" text-left font-medium"
+                      className="py-3"
                     >
                       {header.isPlaceholder
                         ? null
@@ -456,6 +448,10 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
                             header.column.columnDef.header,
                             header.getContext()
                           )}
+
+                      {/* <button className="">
+                        <BiSortAlt2 className="text-gray-500 hover:text-black cursor-pointer" />
+                      </button> */}
                     </TableHead>
                   );
                 })}

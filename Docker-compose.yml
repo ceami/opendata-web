@@ -1,0 +1,11 @@
+version: "3"
+services:
+  openData-web:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    image: openData-web
+    container_name: openData-web
+    # ports:
+    # - '3000:3000'
+    restart: unless-stopped
