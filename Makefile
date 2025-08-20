@@ -3,7 +3,7 @@ environment := $(if $(ENV),$(ENV),local)
 include .env.$(environment)
 export $(shell sed 's/=.*//' .env.$(environment))
 
-COMPOSE_FILE := docker-compose.yml
+COMPOSE_FILE := Docker-compose.yml
 ENV_FILE := .env.$(environment)
 
 ifeq ($(environment),prod)
