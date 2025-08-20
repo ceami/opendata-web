@@ -51,10 +51,10 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
     enabled: !!slug, // slug가 있을 때만 쿼리 실행
   });
 
-  console.log(data);
+  // console.log(data);
 
   return (
-    <div className="w-full h-full max-w-[1200px] mx-auto space-y-8 ">
+    <div className="w-full min-h-screen h-full max-w-[1200px] mx-auto space-y-8 pb-40">
       <DetailHeaders
         description={data?.description}
         listTitle={data?.listTitle}
@@ -169,7 +169,7 @@ const DetailHeaders = ({
   }: {
     generatedStatus?: boolean;
   }) => {
-    console.log(generatedStatus);
+    // console.log(generatedStatus);
     return generatedStatus ? (
       <div className="place-items-start flex items-center gap-2  bg-[#f1f3f4] h-[30px] border  border-gray-500 border-px rounded-[5px] px-2 py-1">
         <BiCheckCircle size={20} className="text-green-500" />
@@ -217,7 +217,7 @@ const DetailHeaders = ({
         (마지막 업데이트: {updatedAtDate && `${updatedAtDate}`})
       </div>
 
-      <div className="text-[18px] ">{description || "설명이 없습니다."}</div>
+      <div className="text-[18px]">{description || "설명이 없습니다."}</div>
 
       <div>
         <Table tableData={tableData} />
@@ -300,15 +300,15 @@ const DetailContent = ({
       return new Promise((resolve) => setTimeout(resolve, 2000));
     },
     onSuccess: () => {
-      console.log("문서 요청 성공");
+      // console.log("문서 요청 성공");
     },
     onError: (error) => {
-      console.error("문서 요청 실패:", error);
+      // console.error("문서 요청 실패:", error);
     },
   });
 
   const handleClick = () => {
-    console.log("클릭");
+    // console.log("클릭");
   };
 
   const buttonCss = `border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[5px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`;
@@ -379,7 +379,7 @@ const DetailContent = ({
   };
 
   return (
-    <div className="border border-gray-300 rounded-[5px] bg-white  px-5 py-4">
+    <div className="border border-gray-300 rounded-[5px] bg-white  px-5 py-4  h-full">
       <p className="text-[20px] font-medium text-mb-4 text-grey-900 py-[11px] ">
         표준 문서
       </p>
@@ -411,11 +411,11 @@ const DetailContent = ({
           </div>
         </div>
 
-        <div className="custom-scrollbar w-full h-[calc(100%-60px)]  rounded-[5px] bg-[#f1f3f4]  overflow-y-auto">
+        <div className="custom-scrollbar w-full max-h-[560px] h-full rounded-[5px] bg-[#f1f3f4]  overflow-y-auto">
           {markdownText ? (
             <ReactMarkdown components={config}>{markdownText}</ReactMarkdown>
           ) : markdownText === null ? (
-            <div className="  w-full h-full items-center text-center flex flex-col justify-center  ">
+            <div className="w-full h-full items-center text-center flex flex-col justify-center">
               <Button
                 className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 cursor-pointer"
                 onClick={() => handleClick()}

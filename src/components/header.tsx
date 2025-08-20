@@ -16,16 +16,16 @@ export const Header = () => {
           OpenData
         </button>
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2">
-            <button
-              className="text-[20px] px-2 font-bold cursor-pointer hover:text-blue-600 transition-colors duration-300"
-              onClick={() =>
-                window.open("/https://smithery.ai/server/@iosif2/open-data-mcp")
-              }
-            >
-              MCP 설치
-            </button>
-          </div>
+          {/* <div className="flex items-center gap-2"> */}
+          <button
+            className="text-[18px] px-2 font-bold cursor-pointer hover:text-blue-600 transition-colors duration-300"
+            onClick={() =>
+              window.open("https://smithery.ai/server/@iosif2/opendata-mcp")
+            }
+          >
+            MCP 설치
+          </button>
+          {/* </div> */}
           <Button
             variant="outline"
             className="bg-[#1565c0] text-white  cursor-pointer   font-semibold duration-300 transition-colors px-[22px] py-[8px]"

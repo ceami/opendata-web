@@ -73,7 +73,7 @@ const fetchData = async (page: number, sortBy: string, query: string) => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/document/v2?q=${query}&page=${page}&size=20&sort_by=${sortBy}&name_sort_by=all&org_sort_by=all&data_type_sort_by=all&token_count_sort_by=all&status_sort_by=all`
   );
   const data = await response.json();
-  console.log("API 응답 데이터:", data);
+  // console.log("API 응답 데이터:", data);
   return data;
 };
 
