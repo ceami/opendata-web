@@ -83,7 +83,7 @@ export const RequestDocks = () => {
         }}
       >
         <p className="text-blue-500 text-[24px] font-bold mb-4">
-          새로운 문서가 있다면 요청하세요
+          새로운 데이터가 있다면 요청하세요
         </p>
         <div className="flex flex-col flex-row max-w-[600px] mx-auto gap-2 w-full">
           <Input

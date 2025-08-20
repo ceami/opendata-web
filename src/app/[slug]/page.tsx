@@ -72,7 +72,7 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
       <DetailContent
         markdownText={data?.markdown}
         tokenCount={data?.tokenCount}
-        createdAtDate={data?.createdAt}
+        generatedAt={data?.generatedAt}
         slug={slug}
       />
     </div>
@@ -215,8 +215,10 @@ const DetailHeaders = ({
       </div>
 
       <div className="flex items-center text-[16px] justify-end py-2">
-        등록일: {createdAtDate}
-        (마지막 업데이트: {updatedAtDate && `${updatedAtDate}`})
+        <p>등록일: {createdAtDate}</p>
+        <p className="ml-1">
+          (마지막 업데이트: {updatedAtDate && `${updatedAtDate}`})
+        </p>
       </div>
 
       <div className="text-[18px]">{description || "설명이 없습니다."}</div>
@@ -232,7 +234,7 @@ const DetailHeaders = ({
               key={index}
               className="bg-[#f1f3f4] text-black border  border-[#a6a9ac] border-px px-2 py-1 rounded text-[16px]"
             >
-              {keyword}
+              #{keyword}
             </span>
           )) || <span>키워드가 없습니다.</span>}
         </div>
@@ -287,12 +289,12 @@ const Table = ({ tableData }: { tableData: TableItem[] }) => {
 const DetailContent = ({
   markdownText,
   tokenCount,
-  createdAtDate,
+  generatedAt,
   slug,
 }: {
   markdownText: string;
   tokenCount: number;
-  createdAtDate: string;
+  generatedAt: string;
   slug: string;
 }) => {
   const { data, isPending, isError, mutate } = useMutation({
@@ -412,7 +414,7 @@ const DetailContent = ({
               </p>
 
               <p className="border border-px inline-block px-4 py-1 border-gray-300 rounded-[5px] bg-gray-100 mb-4">
-                생성일: {transformDate(createdAtDate)}
+                생성일: {transformDate(generatedAt)}
               </p>
             </div>
             <div className="flex items-center   ">
