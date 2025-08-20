@@ -7,6 +7,7 @@ import React, { useMemo } from "react";
 import toast from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { IoCopyOutline } from "react-icons/io5";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { BiCheckCircle, BiErrorCircle } from "react-icons/bi";
@@ -221,7 +222,9 @@ const DetailHeaders = ({
         </p>
       </div>
 
-      <div className="text-[18px]">{description || "설명이 없습니다."}</div>
+      <div className="text-[18px] whitespace-pre-line break-words">
+        {description || "설명이 없습니다."}
+      </div>
 
       <div>
         <Table tableData={tableData} />
@@ -399,7 +402,6 @@ const DetailContent = ({
       return (tokenCount / 1000000).toFixed(1) + "M";
     }
   };
-
   return (
     <div className="border border-gray-300 rounded-[5px] bg-white  px-5 py-4  h-full">
       <p className="text-[20px] font-medium text-mb-4 text-grey-900 py-[11px] ">
@@ -433,9 +435,11 @@ const DetailContent = ({
           </div>
         </div>
 
-        <div className="custom-scrollbar w-full max-h-[560px] h-full rounded-[5px] bg-[#f1f3f4]  overflow-y-auto">
+        <div className="custom-scrollbar p-4 w-full max-h-[560px] h-full rounded-[5px] border border-gray-300 rounded-[5px] overflow-y-auto">
           {markdownText ? (
-            <ReactMarkdown components={config}>{markdownText}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]} components={config}>
+              {markdownText}
+            </ReactMarkdown>
           ) : markdownText === null ? (
             <div className="w-full h-full items-center text-center flex flex-col justify-center">
               <Button
@@ -466,7 +470,12 @@ const config: Components = {
   h3: ({ node, ...props }) => (
     <h3 className="text-lg font-bold mb-2" {...props} />
   ),
-  p: ({ node, ...props }) => <p className="mb-3 text-gray-700" {...props} />,
+  p: ({ node, ...props }) => (
+    <p
+      className="mb-3 text-gray-700 whitespace-pre-line break-words"
+      {...props}
+    />
+  ),
   ul: ({ node, ...props }) => <ul className="list-disc pl-6 mb-3" {...props} />,
   ol: ({ node, ...props }) => (
     <ol className="list-decimal pl-6 mb-3" {...props} />
@@ -483,36 +492,46 @@ const config: Components = {
     ...props
   }: { inline?: boolean } & React.HTMLAttributes<HTMLElement>) =>
     inline ? (
-      <code className="bg-gray-200 px-1 py-0.5 rounded text-sm" {...props} />
+      <code
+        className="bg-gray-200  px-1 py-0.5 rounded  text-sm break-all max-w-full inline-block align-middle"
+        {...props}
+      />
     ) : (
       <code
-        className="block bg-gray-200 p-3 rounded text-sm overflow-x-auto mb-3"
+        className="inline-block w-auto bg-gray-200 p-2 rounded text-sm mb-3 whitespace-pre-wrap break-all max-w-full "
         {...props}
       />
     ),
   pre: ({ node, ...props }) => (
     <pre
-      className="bg-gray-200 p-3 rounded text-sm overflow-x-auto mb-3"
+      className="inline-block w-auto bg-gray-200 p-3 rounded text-sm mb-3 whitespace-pre-wrap break-all max-w-full w-full"
       {...props}
     />
   ),
   a: ({ node, ...props }) => (
-    <a className="text-blue-600 hover:text-blue-800 underline" {...props} />
-  ),
-  table: ({ node, ...props }) => (
-    <table
-      className="border-collapse border border-gray-300 w-full mb-3"
+    <a
+      className="text-blue-600 hover:text-blue-800 underline break-all"
+      target="_blank"
+      rel="noopener noreferrer"
       {...props}
     />
   ),
+  table: ({ node, ...props }) => (
+    <div className="w-full overflow-x-auto mb-3">
+      <table
+        className="border-collapse border border-gray-300 w-full min-w-[640px]"
+        {...props}
+      />
+    </div>
+  ),
   th: ({ node, ...props }) => (
     <th
-      className="border border-gray-300 px-4 py-2 bg-gray-100 font-bold"
+      className="border border-gray-300 px-4 py-2 bg-gray-100 font-bold align-top"
       {...props}
     />
   ),
   td: ({ node, ...props }) => (
-    <td className="border border-gray-300 px-4 py-2" {...props} />
+    <td className="border border-gray-300 px-4 py-2 align-top" {...props} />
   ),
   hr: ({ node, ...props }) => (
     <hr className="my-6 border-gray-300" {...props} />

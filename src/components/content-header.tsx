@@ -30,7 +30,7 @@ export const HeroSection = () => {
         복잡한 공공데이터, AI로 쉽고 빠르게 활용하세요
       </h1>
       <h2 className=" font-medium text-gray-500 text-left h-[48px]  text-[20px]">
-        OpenData MCP로 번거로운 공공데이터포털, 클릭 한 번에 쉽게!
+        OpenDataMCP로 번거로운 공공데이터포털, 클릭 한 번에 쉽게!
         <br />
         누구나 손쉽게, AI가 연결하는 공공데이터 활용의 시작
       </h2>

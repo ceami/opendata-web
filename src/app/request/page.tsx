@@ -108,7 +108,7 @@ export const RequestGuide = () => {
   return (
     <div className="">
       <h2 className="text-[20px] font-medium mb-4 text-gray-800">
-        OpenData MCP 데이터 요청 가이드라인
+        OpenDataMCP 데이터 요청 가이드라인
       </h2>
 
       <div className="space-y-8 text-gray-800">
