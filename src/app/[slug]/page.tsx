@@ -1,5 +1,5 @@
 "use client";
-import { StatusBadge } from "@/components/statusBadge";
+import { getVariantStyles, StatusBadge } from "@/components/statusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -69,6 +69,7 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
         updatedAt={data?.updatedAt}
         keywords={data?.keywords}
         generatedStatus={data?.generatedStatus}
+        dataType={data?.dataType}
       />
       <DetailContent
         markdownText={data?.markdown}
@@ -94,6 +95,7 @@ const DetailHeaders = ({
   updatedAt,
   keywords = [],
   generatedStatus,
+  dataType,
 }: {
   description: string;
   listTitle: string;
@@ -106,6 +108,7 @@ const DetailHeaders = ({
   updatedAt: string;
   keywords?: string[];
   generatedStatus?: boolean;
+  dataType: string;
 }) => {
   const createdAtDate = createdAt ? formatDate(createdAt) : "-";
   const updatedAtDate = updatedAt ? formatDate(updatedAt) : "-";
@@ -191,7 +194,9 @@ const DetailHeaders = ({
   return (
     <div className="w-full h-auto  space-y-4   border border-gray-300 rounded-[5px] bg-white  px-5 py-4">
       <div>
-        <StatusBadge variant="API">오픈 API</StatusBadge>
+        <StatusBadge variant={dataType}>
+          {getVariantStyles(dataType).title}
+        </StatusBadge>
       </div>
       <div className="flex justify-between relative">
         <div className="flex flex-col justify-between">
@@ -387,6 +392,7 @@ const DetailContent = ({
   };
 
   const transformDate = (date: string) => {
+    if (date == null) return "-";
     const dateObj = new Date(date);
     const transDate = formatDate(dateObj.toLocaleDateString("ko-KR"));
 
