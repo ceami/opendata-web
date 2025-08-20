@@ -3,13 +3,14 @@ import { StatusBadge } from "@/components/statusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useMemo } from "react";
 import toast from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import { IoCopyOutline } from "react-icons/io5";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { BiCheckCircle, BiErrorCircle } from "react-icons/bi";
+import { preventRapidClicks } from "@/lib/utils";
 
 const formatDate = (dateStr: string) => {
   if (!dateStr) return "-";
@@ -72,6 +73,7 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
         markdownText={data?.markdown}
         tokenCount={data?.tokenCount}
         createdAtDate={data?.createdAt}
+        slug={slug}
       />
     </div>
   );
@@ -286,37 +288,55 @@ const DetailContent = ({
   markdownText,
   tokenCount,
   createdAtDate,
+  slug,
 }: {
   markdownText: string;
   tokenCount: number;
   createdAtDate: string;
+  slug: string;
 }) => {
-  const { isPending, isError, mutate } = useMutation({
+  const { data, isPending, isError, mutate } = useMutation({
     mutationKey: ["documentRequest"],
     mutationFn: async () => {
-      // console.log("문서 요청 API 호출");
-      // 실제 API 호출 로직을 여기에 작성
-      // 예시로 2초 후에 성공하는 Promise를 반환
-      return new Promise((resolve) => setTimeout(resolve, 2000));
+      const bodyData = {
+        list_id: slug,
+        url: "",
+      };
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/document/save-request`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(bodyData),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      // console.log(data);
+      return data;
     },
     onSuccess: () => {
-      // console.log("문서 요청 성공");
+      toast.success("문서 요청이 완료되었습니다.");
     },
     onError: (error) => {
-      // console.error("문서 요청 실패:", error);
+      toast.error("문서 요청에 실패했습니다.");
     },
   });
 
-  const handleClick = () => {
-    // console.log("클릭");
-  };
+  // 이벤트 기본동작 차단은 즉시 하고, 호출만 쿨다운 처리
+  const handleClick = useMemo(
+    () => preventRapidClicks(() => mutate(), 800),
+    [mutate]
+  );
 
   const buttonCss = `border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[5px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`;
 
   const handleCopy = async () => {
-    // console.log("복사 버튼 클릭됨");
-    // console.log("markdownText:", markdownText);
-
     if (!markdownText) {
       toast.error("복사할 내용이 없습니다.");
       return;

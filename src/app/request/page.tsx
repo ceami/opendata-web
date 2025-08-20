@@ -1,7 +1,11 @@
-import React from "react";
+"use client";
+import React, { useMemo, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { preventRapidClicks } from "@/lib/utils";
 
 const Request = () => {
   return (
@@ -15,9 +19,69 @@ const Request = () => {
 export default Request;
 
 export const RequestDocks = () => {
+  const [inputValue, setInputValue] = useState("");
+  const { data, isPending, isError, mutate } = useMutation({
+    mutationKey: ["documentRequest"],
+    mutationFn: async () => {
+      if (!inputValue) {
+        toast.error("URL을 입력해주세요.");
+        return;
+      }
+
+      const bodyData = {
+        list_id: null,
+        url: inputValue,
+      };
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/document/save-request`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(bodyData),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+
+      return data;
+    },
+    onSuccess: (data) => {
+      if (data.message === "저장되었습니다.") {
+        setInputValue("");
+        toast.success("문서 요청이 완료되었습니다.");
+      } else {
+        setInputValue("");
+        toast.error("문서 요청에 실패했습니다.");
+      }
+    },
+    onError: (error) => {
+      // console.log(error);
+      // toast.error("문서 요청에 실패했습니다.");
+    },
+  });
+
+  // 이벤트 기본동작 차단은 즉시 하고, 호출만 쿨다운 처리
+  const submitOnce = useMemo(
+    () => preventRapidClicks(() => mutate(), 800),
+    [mutate]
+  );
+
   return (
     <div>
-      <form action="submit">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!inputValue.trim()) {
+            toast.error("URL을 입력해주세요.");
+            return;
+          }
+          submitOnce();
+        }}
+      >
         <p className="text-blue-500 text-[24px] font-bold mb-4">
           새로운 문서가 있다면 요청하세요
         </p>
@@ -25,8 +89,13 @@ export const RequestDocks = () => {
           <Input
             placeholder="공공데이터포털 신규 페이지 URL을 입력하세요"
             className="flex-1 px-[20px] py-[8px] border border-black border-1 rounded-[5px] bg-[#f1f3f4]"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
           />
-          <Button className="sm:w-auto w-full bg-[#f1f3f4] text-black text-[16px] hover:bg-blue-500 hover:text-white border-black border-1 rounded-[5px]   ">
+          <Button
+            type="submit"
+            className="sm:w-auto w-full bg-[#f1f3f4] text-black text-[16px] hover:bg-blue-500 hover:text-white border-black border-1 rounded-[5px]   "
+          >
             제출
           </Button>
         </div>
