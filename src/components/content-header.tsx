@@ -27,13 +27,12 @@ export const HeroSection = () => {
   return (
     <div className="w-1/2 h-[87px]  w-full flex flex-col justify-between">
       <h1 className="text-blue-500 font-bold  text-[24px] h-[29px]">
-        복잡한 공공데이터포털 사용법, AI 도구로 손쉽게 사용해 보세요
+        복잡한 공공데이터, AI로 쉽고 빠르게 활용하세요
       </h1>
       <h2 className=" font-medium text-gray-500 text-left h-[48px]  text-[20px]">
-        OpenData MCP는 사용법이 어려운 공공데이터포털의 API와 데이터셋
-        다운로드를 MCP
+        OpenData MCP로 번거로운 공공데이터포털, 클릭 한 번에 쉽게!
         <br />
-        사용이 가능한 도구에서 손쉽게
+        누구나 손쉽게, AI가 연결하는 공공데이터 활용의 시작
       </h2>
     </div>
   );
