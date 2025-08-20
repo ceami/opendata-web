@@ -8,7 +8,7 @@ export const StatusBadge = ({
 }) => {
   return (
     <span
-      className={`inline-flex items-center px-3 py-1 rounded-[5px] text-xs font-light ${
+      className={`inline-flex items-center min-w-[70px] justify-center py-1 rounded-[5px] text-xs font-light ${
         getVariantStyles(variant).className
       }`}
     >
