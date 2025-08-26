@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "./provider/query-provider";
@@ -18,20 +19,40 @@ export const metadata: Metadata = {
   },
 };
 
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="ko">
       <body className={inter.className}>
+        {/* 1) gtag.js 로드 */}
+        {GA_ID ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            {/* 2) gtag 초기화 */}
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}', { send_page_view: false });
+              `}
+            </Script>
+          </>
+        ) : null}
+
         <QueryProvider>
           <DataTableProvider>
             <div
-              className="min-h-screen flex flex-col "
+              className="min-h-screen flex flex-col"
               style={{
-                // 상단 0→160px 구간에서 #D8E2E7 → white로 그라데이션, 이후 전체는 white 유지
                 backgroundColor: "#ffffff",
                 backgroundImage:
                   "linear-gradient(to bottom, #D8E2E7 0px, #ffffff 200px)",
