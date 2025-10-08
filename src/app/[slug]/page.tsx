@@ -2,16 +2,17 @@
 import { getVariantStyles, StatusBadge } from "@/components/statusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useMemo } from "react";
 import toast from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { IoCopyOutline } from "react-icons/io5";
-import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { BiCheckCircle, BiErrorCircle } from "react-icons/bi";
 import { preventRapidClicks } from "@/lib/utils";
+import { MessageCircle, Send } from "lucide-react";
+import { useState } from "react";
 
 const formatDate = (dateStr: string) => {
   if (!dateStr) return "-";
@@ -70,6 +71,8 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
     );
   }
 
+  const comments = "댓글 영역";
+
   return (
     <div className="w-full h-full max-w-[1200px] mx-auto space-y-8 pb-40">
       <DetailHeaders
@@ -95,7 +98,7 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
       {data?.recommendations.length > 0 && (
         <RecommandDocument recommendations={data?.recommendations} />
       )}
-      {/* <RecommandDocument recommendations={data?.recommendations} /> */}
+      <CommentSection slug={slug} />
     </div>
   );
 };
@@ -363,7 +366,7 @@ const DetailContent = ({
     [mutate]
   );
 
-  const buttonCss = `border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[5px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`;
+  // const buttonCss = `border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[5px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`;
 
   const handleCopy = async () => {
     if (!markdownText) {
@@ -563,27 +566,28 @@ const config: Components = {
   ),
 };
 
-// export type RecommendationItem = {
-//   dataType: string;
-//   listId: number;
-//   listTitle: string;
-//   orgNm: string;
-//   similarity: number;
-//   // tokenCount: number;
-//   // hasGeneratedDoc: boolean;
-//   // dataType: string;
-// };
+export type RecommendationItem = {
+  dataType: string;
+  listId: number;
+  listTitle: string;
+  orgNm: string;
+  similarityScore: number;
+};
 
-const RecommandDocument = (recommendations) => {
-  const recommendationsMap = recommendations.recommendations;
-  // console.log(recommendationsMap, "리코");
+const RecommandDocument = ({
+  recommendations,
+}: {
+  recommendations: RecommendationItem[];
+}) => {
+  const recommendationsMap = recommendations;
+
   return (
     <div className="border border-gray-300 rounded-[5px] bg-white  px-5 py-4  h-full">
       <p className="text-[20px] font-medium text-mb-4 text-grey-900 py-[11px] ">
         추천 문서
       </p>
       <div className="grid grid-cols-2 grid-rows-2 gap-4">
-        {recommendationsMap?.map((item, index) => {
+        {recommendationsMap?.map((item: RecommendationItem, index: number) => {
           return (
             <div
               key={index}
@@ -615,56 +619,176 @@ const RecommandDocument = (recommendations) => {
           );
         })}
       </div>
+    </div>
+  );
+};
 
-      {/* <div className=" h-[650px]  ">
-        <div className="w-full flex space-x-2 ">
-          <div className="flex items-center justify-between w-full ">
-            <div className="flex items-center space-x-2 ">
-              <p className="border border-px inline-block px-4 py-1 border-gray-300 rounded-[5px] bg-gray-100 mb-4">
-                토큰: {countToken(tokenCount) ?? 0}
-              </p>
+export const CommentSection = ({
+  // comments,
+  slug,
+}: {
+  // comments: string;
+  slug: string;
+}) => {
+  const [comment, setComment] = useState("");
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["comments", slug],
+    queryFn: async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/comments/${slug}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.json();
+    },
+  });
 
-              <p className="border border-px inline-block px-4 py-1 border-gray-300 rounded-[5px] bg-gray-100 mb-4">
-                생성일: {transformDate(generatedAt)}
-              </p>
-            </div>
-            <div className="flex items-center   ">
-              <Button
-                className={`group border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[5px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`}
-                onClick={handleCopy}
-                disabled={!markdownText}
-              >
-                <IoCopyOutline
-                  size={20}
-                  className="inline-block  mr-1 text-gray-500 cursor-pointer hover:text-gray-700 group-hover:text-gray-700"
-                />
-                내용 복사
-              </Button>
-            </div>
+  //   POST /api/v1/comments
+  // body 안에
+  // list_id: int
+  // content: str
+  const queryClient = useQueryClient();
+
+  const { isPending: isSending, mutate: sendComment } = useMutation({
+    mutationKey: ["sendComment"],
+    mutationFn: async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/comments`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            list_id: slug,
+            content: comment,
+          }),
+        }
+      );
+      return response.json();
+    },
+    onSuccess: () => {
+      setComment("");
+      queryClient.invalidateQueries({ queryKey: ["comments", slug] });
+      toast.success("댓글 작성이 완료되었습니다.");
+    },
+    onError: () => {
+      toast.error("댓글 작성에 실패했습니다.");
+    },
+  });
+
+  const handleComment = () => {
+    if (!comment.trim() || isSending) return;
+    sendComment();
+    // console.log("댓글 작성");
+  };
+
+  const reversedComments = (() => {
+    const items = data?.items ?? [];
+    // toReversed가 없는 환경 대비
+    return typeof (items as any).toReversed === "function"
+      ? (items as any).toReversed()
+      : [...items].reverse();
+  })();
+
+  type CommentItem = {
+    content: string;
+    author?: string;
+    created_at?: string;
+    createdAt?: string;
+  };
+
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleComment();
+    }
+  };
+
+  return (
+    <div className="border border-gray-300 rounded-[5px] bg-white  px-5 py-4  h-full">
+      <p className="text-[20px] font-medium text-mb-4 text-grey-900 py-[11px] ">
+        댓글
+      </p>
+      <div className="">
+        {Array.isArray(data?.items) && data.items.length === 0 ? (
+          <div className="text-gray-500 text-center py-8">댓글이 없습니다.</div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {reversedComments?.map((item: CommentItem, index: number) => {
+              const createdAt = item?.created_at || item?.createdAt;
+              const dateLabel = createdAt ? formatDate(createdAt) : "";
+              const initial = (item?.author || "").trim().charAt(0) || "🗨";
+              return (
+                <div
+                  key={index}
+                  className="flex border border-gray-200 h-full rounded-[6px] p-3 hover:bg-gray-50 transition-colors"
+                >
+                  {/* <div className="flex-shrink-0  rounded-full bg-gray-200 text-gray-700 flex items-center justify-center text-sm"> */}
+                  <div className="h-full flex  items-center justify-center w-10  ">
+                    <MessageCircle />
+                  </div>
+                  {/* </div> */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-medium text-gray-900 truncate">
+                        {item?.author || "익명"}
+                      </span>
+                      {dateLabel && (
+                        <span className="text-xs text-gray-500 ml-2">
+                          {dateLabel}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[14px] text-gray-800 whitespace-pre-line break-words">
+                      {item?.content}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        </div>
+        )}
+        {/* {data?.comments.length === 0 ? (
+          <div className="text-gray-500 text-center py-8">댓글이 없습니다.</div>
+        ) : (
+          <div className="grid grid-cols-2 grid-rows-2 gap-4">
+            {comments?.map((item, index) => {
+              return <div key={index}>{item}</div>;
+            })}
+          </div>
+        )} */}
+      </div>
 
-        <div className="custom-scrollbar p-4 w-full max-h-[560px] h-full rounded-[5px] border border-gray-300 rounded-[5px] overflow-y-auto">
-          {markdownText ? (
-            <ReactMarkdown remarkPlugins={[remarkGfm]} components={config}>
-              {markdownText}
-            </ReactMarkdown>
-          ) : markdownText === null ? (
-            <div className="w-full h-full items-center text-center flex flex-col justify-center">
-              <Button
-                className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 cursor-pointer"
-                onClick={() => handleClick()}
-              >
-                문서 요청하기
-              </Button>
-            </div>
-          ) : (
-            <div className="text-gray-500 text-center py-8">
-              문서 내용을 불러오는 중입니다...
-            </div>
-          )}
-        </div>
+      {/* <div className="grid grid-cols-2 grid-rows-2 gap-4">
+        {comments?.map((item, index) => {
+          return <div key={index}>{item}</div>;
+        })}
       </div> */}
+      <div className="flex items-center relative justify-between mt-4">
+        <Input
+          placeholder="댓글을 입력해주세요."
+          className="border border-gray-300 rounded-[5px] bg-white  px-5 py-4  h-full"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <div className="absolute right-3">
+          <Send
+            size={20}
+            className={`inline-block  mr-1 ${
+              !comment.trim() || isSending
+                ? "text-gray-300 cursor-not-allowed"
+                : "text-gray-500 cursor-pointer hover:text-gray-700 group-hover:text-gray-700"
+            }`}
+            onClick={handleComment}
+          />
+        </div>
+      </div>
     </div>
   );
 };
