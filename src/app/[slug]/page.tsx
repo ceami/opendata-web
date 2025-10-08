@@ -574,7 +574,7 @@ const config: Components = {
 //   // dataType: string;
 // };
 
-const RecommandDocument = (recommendations: any) => {
+const RecommandDocument = (recommendations) => {
   const recommendationsMap = recommendations.recommendations;
   // console.log(recommendationsMap, "리코");
   return (
@@ -583,7 +583,7 @@ const RecommandDocument = (recommendations: any) => {
         추천 문서
       </p>
       <div className="grid grid-cols-2 grid-rows-2 gap-4">
-        {recommendationsMap?.map((item: any, index: number) => {
+        {recommendationsMap?.map((item, index) => {
           return (
             <div
               key={index}
