@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
+import React from "react";
 import Script from "next/script";
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import { QueryProvider } from "./provider/query-provider";
-import { DataTableProvider } from "@/contexts/DataTableContext";
+import { Toaster } from "react-hot-toast";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { Toaster } from "react-hot-toast";
+import { QueryProvider } from "./provider/query-provider";
+import { DataTableProvider } from "@/contexts/DataTableContext";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,7 +32,7 @@ export default function RootLayout({
       <body className={inter.className}>
         {/* 1) gtag.js 로드 */}
         {GA_ID ? (
-          <>
+          <React.Fragment>
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
               strategy="afterInteractive"
@@ -45,7 +46,7 @@ export default function RootLayout({
                 gtag('config', '${GA_ID}', { send_page_view: false });
               `}
             </Script>
-          </>
+          </React.Fragment>
         ) : null}
 
         <QueryProvider>

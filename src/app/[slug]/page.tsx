@@ -25,7 +25,7 @@ const formatDate = (dateStr: string) => {
 const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = React.use(params);
 
-  const { data, isError, isLoading } = useQuery({
+  const { data, isError, isPending } = useQuery({
     queryKey: ["detailData", slug],
     queryFn: async () => {
       // Simulate fetching data based on the slug
@@ -37,26 +37,41 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
       }
       return response.json();
     },
-    staleTime: 1000 * 60 * 5, // 5분 동안은 데이터를 fresh로 간주
-    gcTime: 1000 * 60 * 30, // 30분 동안 캐시 유지 (이전 cacheTime)
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
 
-    // 재요청 방지 옵션들
     refetchOnWindowFocus: false, // 윈도우 포커스 시 재요청 방지
     refetchOnMount: false, // 컴포넌트 마운트 시 재요청 방지 (캐시가 있으면)
     refetchOnReconnect: false, // 네트워크 재연결 시 재요청 방지
 
-    // 재시도 옵션
     retry: 1, // 실패 시 1번만 재시도
     retryDelay: 1000, // 재시도 간격 1초
 
-    // 데이터가 있을 때만 활성화 (선택사항)
     enabled: !!slug, // slug가 있을 때만 쿼리 실행
   });
 
-  // console.log(data);
+  if (isPending) {
+    return (
+      <div className="w-full min-h-calc(100vh-100px) h-full max-w-[1200px] mx-auto space-y-8 pb-40">
+        <div className="w-full h-full flex items-center justify-center">
+          {/* <div className="w-10 h-10 border-t-transparent border-b-transparent border-r-transparent border-l-transparent border-gray-200 rounded-full animate-spin"></div> */}
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="w-full min-h-calc(100vh-100px)  flex items-center justify-center max-w-[1200px] mx-auto ">
+        <div className="rounded-md bg-transparent  p-20  text-center w-full border border-gray-300  ">
+          데이터 조회 실패
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full min-h-screen h-full max-w-[1200px] mx-auto space-y-8 pb-40">
+    <div className="w-full h-full max-w-[1200px] mx-auto space-y-8 pb-40">
       <DetailHeaders
         description={data?.description}
         listTitle={data?.listTitle}
@@ -77,6 +92,10 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
         generatedAt={data?.generatedAt}
         slug={slug}
       />
+      {data?.recommendations.length > 0 && (
+        <RecommandDocument recommendations={data?.recommendations} />
+      )}
+      {/* <RecommandDocument recommendations={data?.recommendations} /> */}
     </div>
   );
 };
@@ -542,4 +561,110 @@ const config: Components = {
   hr: ({ node, ...props }) => (
     <hr className="my-6 border-gray-300" {...props} />
   ),
+};
+
+// export type RecommendationItem = {
+//   dataType: string;
+//   listId: number;
+//   listTitle: string;
+//   orgNm: string;
+//   similarity: number;
+//   // tokenCount: number;
+//   // hasGeneratedDoc: boolean;
+//   // dataType: string;
+// };
+
+const RecommandDocument = (recommendations: any) => {
+  const recommendationsMap = recommendations.recommendations;
+  // console.log(recommendationsMap, "리코");
+  return (
+    <div className="border border-gray-300 rounded-[5px] bg-white  px-5 py-4  h-full">
+      <p className="text-[20px] font-medium text-mb-4 text-grey-900 py-[11px] ">
+        추천 문서
+      </p>
+      <div className="grid grid-cols-2 grid-rows-2 gap-4">
+        {recommendationsMap?.map((item: any, index: number) => {
+          return (
+            <div
+              key={index}
+              className="flex p-2 flex-col gap-y-1 hover:bg-gray-50 transition-colors transition-all duration-300 group cursor-pointer border border-gray-300 rounded-[5px] bg-white  "
+              onClick={() => {
+                window.open(`/${item.listId}`, "_blank");
+              }}
+            >
+              <div className="flex justify-start">
+                <StatusBadge variant={item.dataType}>
+                  {getVariantStyles(item.dataType).title}
+                </StatusBadge>
+              </div>
+              <div className="p-2">
+                <p className="text-[16px] group-hover:text-blue-500 font-medium text-grey-900">
+                  {item.listTitle}
+                </p>
+                <div className="flex justify-between">
+                  <p className="text-[14px] text-grey-500">{item.orgNm}</p>
+                  <p className="text-[14px] text-grey-500 flex items-center gap-x-1">
+                    <span className="text-grey-500">유사도:</span>
+                    <span className="font-semibold">
+                      {(item.similarityScore * 100).toFixed(0)}%
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* <div className=" h-[650px]  ">
+        <div className="w-full flex space-x-2 ">
+          <div className="flex items-center justify-between w-full ">
+            <div className="flex items-center space-x-2 ">
+              <p className="border border-px inline-block px-4 py-1 border-gray-300 rounded-[5px] bg-gray-100 mb-4">
+                토큰: {countToken(tokenCount) ?? 0}
+              </p>
+
+              <p className="border border-px inline-block px-4 py-1 border-gray-300 rounded-[5px] bg-gray-100 mb-4">
+                생성일: {transformDate(generatedAt)}
+              </p>
+            </div>
+            <div className="flex items-center   ">
+              <Button
+                className={`group border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[5px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`}
+                onClick={handleCopy}
+                disabled={!markdownText}
+              >
+                <IoCopyOutline
+                  size={20}
+                  className="inline-block  mr-1 text-gray-500 cursor-pointer hover:text-gray-700 group-hover:text-gray-700"
+                />
+                내용 복사
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="custom-scrollbar p-4 w-full max-h-[560px] h-full rounded-[5px] border border-gray-300 rounded-[5px] overflow-y-auto">
+          {markdownText ? (
+            <ReactMarkdown remarkPlugins={[remarkGfm]} components={config}>
+              {markdownText}
+            </ReactMarkdown>
+          ) : markdownText === null ? (
+            <div className="w-full h-full items-center text-center flex flex-col justify-center">
+              <Button
+                className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 cursor-pointer"
+                onClick={() => handleClick()}
+              >
+                문서 요청하기
+              </Button>
+            </div>
+          ) : (
+            <div className="text-gray-500 text-center py-8">
+              문서 내용을 불러오는 중입니다...
+            </div>
+          )}
+        </div>
+      </div> */}
+    </div>
+  );
 };

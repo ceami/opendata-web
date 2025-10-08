@@ -164,6 +164,7 @@ export const TabContent = () => {
               />
             </TabsTrigger>
           </div>
+
           <div className="relative flex justify-end w-1/3 items-center">
             <Input
               type="email"
@@ -515,7 +516,6 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -549,93 +549,31 @@ export function PaginationDemo({
   };
 
   const renderPageNumbers = () => {
-    const pages = [];
-    const maxVisiblePages = 5;
+    const pages = [] as React.ReactNode[];
+    const blockSize = 10; // 중앙 숫자를 10개 단위 블록으로 표시
 
-    if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(
-          <PaginationItem key={i}>
-            <PaginationLink
-              href="#"
-              isActive={i === currentPage}
-              onClick={(e) => {
-                e.preventDefault();
-                handlePageChange(i);
-              }}
-            >
-              {i}
-            </PaginationLink>
-          </PaginationItem>
-        );
-      }
-    } else {
-      // 현재 페이지 주변의 페이지들만 표시
-      const startPage = Math.max(1, currentPage - 2);
-      const endPage = Math.min(totalPages, currentPage + 2);
+    const currentBlockStart =
+      Math.floor((currentPage - 1) / blockSize) * blockSize + 1;
+    const currentBlockEnd = Math.min(
+      totalPages,
+      currentBlockStart + blockSize - 1
+    );
 
-      if (startPage > 1) {
-        pages.push(
-          <PaginationItem key={1}>
-            <PaginationLink
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                handlePageChange(1);
-              }}
-            >
-              1
-            </PaginationLink>
-          </PaginationItem>
-        );
-        if (startPage > 2) {
-          pages.push(
-            <PaginationItem key="ellipsis1">
-              <PaginationEllipsis />
-            </PaginationItem>
-          );
-        }
-      }
-
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(
-          <PaginationItem key={i}>
-            <PaginationLink
-              href="#"
-              isActive={i === currentPage}
-              onClick={(e) => {
-                e.preventDefault();
-                handlePageChange(i);
-              }}
-            >
-              {i}
-            </PaginationLink>
-          </PaginationItem>
-        );
-      }
-
-      if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-          pages.push(
-            <PaginationItem key="ellipsis2">
-              <PaginationEllipsis />
-            </PaginationItem>
-          );
-        }
-        pages.push(
-          <PaginationItem key={totalPages}>
-            <PaginationLink
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                handlePageChange(totalPages);
-              }}
-            >
-              {totalPages}
-            </PaginationLink>
-          </PaginationItem>
-        );
-      }
+    for (let i = currentBlockStart; i <= currentBlockEnd; i++) {
+      pages.push(
+        <PaginationItem key={i}>
+          <PaginationLink
+            href="#"
+            isActive={i === currentPage}
+            onClick={(e) => {
+              e.preventDefault();
+              handlePageChange(i);
+            }}
+          >
+            {i}
+          </PaginationLink>
+        </PaginationItem>
+      );
     }
 
     return pages;
@@ -643,15 +581,28 @@ export function PaginationDemo({
 
   return (
     <div className="flex flex-col items-center gap-4">
-      {/* <div className="text-sm text-muted-foreground">
-        총 {total.toLocaleString()}개 항목 중 {(currentPage - 1) * 20 + 1}-
-        {Math.min(currentPage * 20, total)}번째
-      </div> */}
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious
+            <PaginationLink
               href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                const target = Math.max(1, currentPage - 10);
+                handlePageChange(target);
+              }}
+              className={
+                currentPage <= 10 ? "pointer-events-none opacity-50" : ""
+              }
+            >
+              « 10
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink
+              href="#"
+              aria-label="이전 페이지"
+              title="이전 페이지"
               onClick={(e) => {
                 e.preventDefault();
                 handlePageChange(currentPage - 1);
@@ -659,14 +610,18 @@ export function PaginationDemo({
               className={
                 currentPage === 1 ? "pointer-events-none opacity-50" : ""
               }
-            />
+            >
+              ‹ 이전
+            </PaginationLink>
           </PaginationItem>
 
           {renderPageNumbers()}
 
           <PaginationItem>
-            <PaginationNext
+            <PaginationLink
               href="#"
+              aria-label="다음 페이지"
+              title="다음 페이지"
               onClick={(e) => {
                 e.preventDefault();
                 handlePageChange(currentPage + 1);
@@ -676,7 +631,26 @@ export function PaginationDemo({
                   ? "pointer-events-none opacity-50"
                   : ""
               }
-            />
+            >
+              다음 ›
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                const target = Math.min(totalPages, currentPage + 10);
+                handlePageChange(target);
+              }}
+              className={
+                currentPage + 10 > totalPages
+                  ? "pointer-events-none opacity-50"
+                  : ""
+              }
+            >
+              10 »
+            </PaginationLink>
           </PaginationItem>
         </PaginationContent>
       </Pagination>
