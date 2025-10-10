@@ -13,6 +13,7 @@ import { BiCheckCircle, BiErrorCircle } from "react-icons/bi";
 import { preventRapidClicks } from "@/lib/utils";
 import { MessageCircle, Send } from "lucide-react";
 import { useState } from "react";
+import GiscusComments from "./giscusComments";
 
 const formatDate = (dateStr: string) => {
   if (!dateStr) return "-";
@@ -98,7 +99,8 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
       {data?.recommendations.length > 0 && (
         <RecommandDocument recommendations={data?.recommendations} />
       )}
-      <CommentSection slug={slug} />
+      {/* <CommentSection slug={slug} /> */}
+      <GiscusComments />
     </div>
   );
 };

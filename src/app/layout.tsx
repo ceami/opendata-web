@@ -30,14 +30,30 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={inter.className}>
-        {/* 1) gtag.js 로드 */}
+        {/* Giscus 댓글 시스템 */}
+        {/* <Script
+          src="https://giscus.app/client.js"
+          data-repo="ceami/opendata-web"
+          data-repo-id="R_kgDOPb0Zug"
+          data-category="Q&A"
+          data-category-id="DIC_kwDOPb0Zus4Cwa2v"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="preferred_color_scheme"
+          data-lang="ko"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        /> */}
+        {/* Google Analytics */}
         {GA_ID ? (
-          <React.Fragment>
+          <>
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
               strategy="afterInteractive"
             />
-            {/* 2) gtag 초기화 */}
             <Script id="gtag-init" strategy="afterInteractive">
               {`
                 window.dataLayer = window.dataLayer || [];
@@ -46,7 +62,7 @@ export default function RootLayout({
                 gtag('config', '${GA_ID}', { send_page_view: false });
               `}
             </Script>
-          </React.Fragment>
+          </>
         ) : null}
 
         <QueryProvider>
