@@ -86,9 +86,14 @@ npm run dev
 
 ```bash
 pnpm dev        # 개발 서버 (Turbopack)
-pnpm build      # 프로덕션 빌드
+pnpm build      # 프로덕션 빌드 (라이선스 자동 생성 포함)
 pnpm start      # 빌드 후 서버 시작
 pnpm lint       # 린트
+
+# 라이선스 관련
+pnpm dep:gen           # 프론트엔드 라이선스 생성
+pnpm backend-licenses  # 백엔드 라이선스 생성
+pnpm all-licenses      # 모든 라이선스 생성
 
 # npm 사용 시
 npm run dev
@@ -107,6 +112,35 @@ npm run lint
 2. 환경 변수 설정: `NEXT_PUBLIC_API_URL`을 배포 환경에 맞춰 설정
 3. 실행: `pnpm start` (또는 `npm run start`)
 
-### 라이선스
+### 라이선스 관리
+
+이 프로젝트는 자동화된 라이선스 관리 시스템을 사용합니다:
+
+#### 자동 라이선스 생성
+
+- **프론트엔드**: `license-report` 패키지를 사용하여 NPM 의존성의 라이선스 정보를 자동 생성
+- **백엔드**: Python 스크립트를 사용하여 pip/uv 의존성의 라이선스 정보를 자동 생성
+- **빌드 시 자동 실행**: `pnpm build` 실행 시 모든 라이선스 정보가 자동으로 생성됩니다
+
+#### 라이선스 페이지
+
+- `/licenses` 경로에서 모든 오픈소스 라이브러리의 라이선스 정보를 확인할 수 있습니다
+- 프론트엔드와 백엔드 의존성을 탭으로 구분하여 표시
+- 각 라이브러리의 홈페이지, 작성자, 라이선스 정보를 포함
+
+#### 수동 라이선스 생성
+
+```bash
+# 프론트엔드 라이선스만 생성
+pnpm dep:gen
+
+# 백엔드 라이선스만 생성
+pnpm backend-licenses
+
+# 모든 라이선스 생성
+pnpm all-licenses
+```
+
+### 프로젝트 라이선스
 
 이 프로젝트는 `LICENSE`의 규정을 따릅니다.

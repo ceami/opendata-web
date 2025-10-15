@@ -13,12 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+"use client";
+import { useRouter } from "next/navigation";
 export const Footer = () => {
+  const router = useRouter();
+
   return (
-    <div className="bg-white fixed bottom-0 w-full h-[60px]">
-      <p className="max-w-[1200px] mx-auto h-full flex items-center  text-[18px] font-light">
-        © 2025 OpenDataMCP is an ezrnd project
-      </p>
+    <div className="bg-white  fixed bottom-0 w-full h-[60px]">
+      <div className="flex justify-between max-w-[1200px] mx-auto h-full">
+        <p className=" flex items-center  text-[18px] font-light">
+          © 2025 OpenDataMCP is an ezrnd project
+        </p>
+        <button
+          className="px-2  cursor-pointer hover:text-blue-600 transition-colors duration-300"
+          onClick={() => router.push("/licenses")}
+        >
+          라이선스
+        </button>
+      </div>
     </div>
   );
 };

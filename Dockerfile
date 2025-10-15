@@ -22,4 +22,6 @@ COPY . .
 
 RUN pnpm install
 
+RUN pnpm run dep:gen
+
 CMD ["pnpm","run","start"]
