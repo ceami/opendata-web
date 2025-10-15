@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 Team Aeris
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
@@ -8,7 +23,6 @@ interface DataTableContextType {
   setCurrentPage: (page: number) => void;
   setCurrentTab: (tab: string) => void;
   setQuery: (query: string) => void;
-  // 상태 복원을 위한 함수
   restoreState: (page: number, tab: string, searchQuery: string) => void;
 }
 
@@ -25,7 +39,6 @@ export const DataTableProvider = ({
   const [currentTab, setCurrentTab] = useState("popular");
   const [query, setQuery] = useState("");
 
-  // localStorage에서 상태 복원
   useEffect(() => {
     const savedState = localStorage.getItem("dataTableState");
     if (savedState) {
@@ -35,12 +48,10 @@ export const DataTableProvider = ({
         setCurrentTab(tab || "popular");
         setQuery(searchQuery || "");
       } catch (error) {
-        // console.error("Failed to restore state:", error);
       }
     }
   }, []);
 
-  // 상태 변경 시 localStorage에 저장
   useEffect(() => {
     localStorage.setItem(
       "dataTableState",
@@ -52,7 +63,6 @@ export const DataTableProvider = ({
     );
   }, [currentPage, currentTab, query]);
 
-  // 상태 복원 함수
   const restoreState = (page: number, tab: string, searchQuery: string) => {
     setCurrentPage(page);
     setCurrentTab(tab);

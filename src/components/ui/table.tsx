@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 Team Aeris
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 "use client";
 
 import * as React from "react";
@@ -23,7 +38,6 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
     <thead
       data-slot="table-header"
-      // className={cn("[&_tr]:border-b", className)}
       className={cn("border-b border-t border-[#70757a] ", className)}
       {...props}
     />
@@ -34,7 +48,6 @@ function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
   return (
     <tbody
       data-slot="table-body"
-      // className={cn("[&_tr:last-child]:border-0", className)}
       className={cn("", className)}
       {...props}
     />
@@ -46,7 +59,6 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
     <tfoot
       data-slot="table-footer"
       className={cn(
-        // "bg-muted/50 border-t font-medium [&>tr]:last:border-b-0",
         "bg-muted/50 font-medium ",
 
         className
@@ -61,7 +73,6 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        // "hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors",
         "hover:bg-muted/50 data-[state=selected]:bg-muted  transition-colors border-b border-[#e3e3e3]",
 
         className

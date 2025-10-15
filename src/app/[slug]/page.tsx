@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 Team Aeris
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 "use client";
 import { getVariantStyles, StatusBadge } from "@/components/statusBadge";
 import { Button } from "@/components/ui/button";
@@ -21,7 +36,7 @@ const formatDate = (dateStr: string) => {
   const yyyy = date.getFullYear();
   const mm = String(date.getMonth() + 1).padStart(2, "0");
   const dd = String(date.getDate()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}`.replace(/\.$/, ""); // Remove trailing period if exists
+  return `${yyyy}-${mm}-${dd}`.replace(/\.$/, "");
 };
 
 const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
@@ -30,7 +45,6 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
   const { data, isError, isPending } = useQuery({
     queryKey: ["detailData", slug],
     queryFn: async () => {
-      // Simulate fetching data based on the slug
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/document/std-docs/${slug}`
       );
@@ -42,21 +56,20 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 30,
 
-    refetchOnWindowFocus: false, // 윈도우 포커스 시 재요청 방지
-    refetchOnMount: false, // 컴포넌트 마운트 시 재요청 방지 (캐시가 있으면)
-    refetchOnReconnect: false, // 네트워크 재연결 시 재요청 방지
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
 
-    retry: 1, // 실패 시 1번만 재시도
-    retryDelay: 1000, // 재시도 간격 1초
+    retry: 1,
+    retryDelay: 1000,
 
-    enabled: !!slug, // slug가 있을 때만 쿼리 실행
+    enabled: !!slug,
   });
 
   if (isPending) {
     return (
       <div className="w-full min-h-calc(100vh-100px) h-full max-w-[1200px] mx-auto space-y-8 pb-40">
         <div className="w-full h-full flex items-center justify-center">
-          {/* <div className="w-10 h-10 border-t-transparent border-b-transparent border-r-transparent border-l-transparent border-gray-200 rounded-full animate-spin"></div> */}
         </div>
       </div>
     );
@@ -99,7 +112,6 @@ const DetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
       {data?.recommendations.length > 0 && (
         <RecommandDocument recommendations={data?.recommendations} />
       )}
-      {/* <CommentSection slug={slug} /> */}
       <GiscusComments />
     </div>
   );
@@ -149,20 +161,13 @@ const DetailHeaders = ({
   ];
 
   const handleShare = async () => {
-    // console.log("공유 버튼 클릭됨");
-
-    // 현재 페이지 URL 가져오기
     const currentUrl = window.location.href;
-    // console.log("현재 페이지 URL:", currentUrl);
 
     try {
-      // 최신 브라우저용 Clipboard API 사용
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(currentUrl);
         toast.success("페이지 링크가 클립보드에 복사되었습니다!");
-        // console.log("페이지 링크 복사 성공");
       } else {
-        // 구형 브라우저용 fallback
         const textArea = document.createElement("textarea");
         textArea.value = currentUrl;
         textArea.style.position = "fixed";
@@ -176,20 +181,16 @@ const DetailHeaders = ({
           const successful = document.execCommand("copy");
           if (successful) {
             toast.success("페이지 링크가 클립보드에 복사되었습니다!");
-            // console.log("페이지 링크 복사 성공");
           } else {
             toast.error("링크 복사에 실패했습니다.");
-            // console.log("링크 복사 실패");
           }
         } catch (err) {
-          // console.error("링크 복사 에러:", err);
           toast.error("링크 복사에 실패했습니다.");
         }
 
         document.body.removeChild(textArea);
       }
     } catch (err) {
-      // console.error("링크 복사 중 에러 발생:", err);
       toast.error("링크 복사에 실패했습니다.");
     }
   };
@@ -199,7 +200,6 @@ const DetailHeaders = ({
   }: {
     generatedStatus?: boolean;
   }) => {
-    // console.log(generatedStatus);
     return generatedStatus ? (
       <div className="place-items-start flex items-center gap-2  bg-[#f1f3f4] h-[30px] border  border-gray-500 border-px rounded-[5px] px-2 py-1">
         <BiCheckCircle size={20} className="text-green-500" />
@@ -212,8 +212,6 @@ const DetailHeaders = ({
       </div>
     );
   };
-
-  // const isGenerated = generatedStatus
 
   return (
     <div className="w-full h-auto  space-y-4   border border-gray-300 rounded-[5px] bg-white  px-5 py-4">
@@ -351,7 +349,6 @@ const DetailContent = ({
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      // console.log(data);
       return data;
     },
     onSuccess: () => {
@@ -362,13 +359,10 @@ const DetailContent = ({
     },
   });
 
-  // 이벤트 기본동작 차단은 즉시 하고, 호출만 쿨다운 처리
   const handleClick = useMemo(
     () => preventRapidClicks(() => mutate(), 800),
     [mutate]
   );
-
-  // const buttonCss = `border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[5px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`;
 
   const handleCopy = async () => {
     if (!markdownText) {
@@ -377,13 +371,10 @@ const DetailContent = ({
     }
 
     try {
-      // 최신 브라우저용 Clipboard API 사용
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(markdownText);
         toast.success("텍스트가 클립보드에 복사되었습니다!");
-        // console.log("Clipboard API로 복사 성공");
       } else {
-        // 구형 브라우저용 fallback
         const textArea = document.createElement("textarea");
         textArea.value = markdownText;
         textArea.style.position = "fixed";
@@ -397,20 +388,16 @@ const DetailContent = ({
           const successful = document.execCommand("copy");
           if (successful) {
             toast.success("텍스트가 클립보드에 복사되었습니다!");
-            // console.log("execCommand로 복사 성공");
           } else {
             toast.error("복사에 실패했습니다.");
-            // console.log("execCommand 복사 실패");
           }
         } catch (err) {
-          // console.error("execCommand 에러:", err);
           toast.error("복사에 실패했습니다.");
         }
 
         document.body.removeChild(textArea);
       }
     } catch (err) {
-      // console.error("복사 중 에러 발생:", err);
       toast.error("복사에 실패했습니다.");
     }
   };

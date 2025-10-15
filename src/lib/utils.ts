@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 Team Aeris
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -5,7 +20,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// 연속 클릭 방지 유틸: 호출 중이거나 쿨다운 동안 추가 호출을 무시합니다.
 export function preventRapidClicks<TArgs extends unknown[], TReturn>(
   fn: (...args: TArgs) => TReturn | Promise<TReturn>,
   cooldownMs = 600
@@ -19,14 +33,12 @@ export function preventRapidClicks<TArgs extends unknown[], TReturn>(
     try {
       const result = fn(...args);
 
-      // Promise 작업이면 완료 후 쿨다운 해제
       if (result instanceof Promise) {
         return result.finally(() => {
           isCooling = false;
         });
       }
 
-      // 동기 작업이면 타이머로 쿨다운 해제
       setTimeout(() => {
         isCooling = false;
       }, cooldownMs);

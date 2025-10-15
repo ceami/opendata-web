@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 Team Aeris
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import React from "react";
 import Script from "next/script";
 import type { Metadata } from "next";
@@ -30,24 +45,6 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={inter.className}>
-        {/* Giscus 댓글 시스템 */}
-        {/* <Script
-          src="https://giscus.app/client.js"
-          data-repo="ceami/opendata-web"
-          data-repo-id="R_kgDOPb0Zug"
-          data-category="Q&A"
-          data-category-id="DIC_kwDOPb0Zus4Cwa2v"
-          data-mapping="pathname"
-          data-strict="0"
-          data-reactions-enabled="1"
-          data-emit-metadata="0"
-          data-input-position="bottom"
-          data-theme="preferred_color_scheme"
-          data-lang="ko"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        /> */}
-        {/* Google Analytics */}
         {GA_ID ? (
           <>
             <Script

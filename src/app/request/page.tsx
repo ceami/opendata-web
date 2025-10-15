@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 Team Aeris
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 "use client";
 import React, { useMemo, useState } from "react";
 
@@ -59,12 +74,9 @@ export const RequestDocks = () => {
       }
     },
     onError: (error) => {
-      // console.log(error);
-      // toast.error("문서 요청에 실패했습니다.");
     },
   });
 
-  // 이벤트 기본동작 차단은 즉시 하고, 호출만 쿨다운 처리
   const submitOnce = useMemo(
     () => preventRapidClicks(() => mutate(), 800),
     [mutate]
@@ -112,7 +124,6 @@ export const RequestGuide = () => {
       </h2>
 
       <div className="space-y-8 text-gray-800">
-        {/* 1. 데이터 요청 유형 */}
         <section className="">
           <h3 className="text-lg  ">1. 데이터 요청 유형</h3>
           <ol className=" ml-1 space-y-3">
@@ -138,7 +149,6 @@ export const RequestGuide = () => {
           </ol>
         </section>
 
-        {/* 2. 데이터 요청 우선순위 */}
         <section>
           <h3 className="text-lg  ">2. 데이터 요청 우선순위</h3>
           <ol className="ml-1 space-y-4">
@@ -179,7 +189,6 @@ export const RequestGuide = () => {
           </ol>
         </section>
 
-        {/* 3. 검토 및 처리 */}
         <section>
           <h3 className="text-lg  ">3. 검토 및 처리</h3>
           <ul className="list-disc ml-7 text-gray-700">
