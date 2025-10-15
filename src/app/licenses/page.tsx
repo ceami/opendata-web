@@ -49,7 +49,6 @@ async function getLicensesData(): Promise<{
   try {
     const publicDir = path.join(process.cwd(), "public");
 
-    // 프론트엔드 라이선스 데이터 로드
     let frontendLicenses: FrontendLicenses | undefined;
     const frontendPath = path.join(publicDir, "licenses.json");
     if (fs.existsSync(frontendPath)) {
