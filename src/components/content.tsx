@@ -61,7 +61,6 @@ import {
 } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 
-// 데이터 타입 정의
 export type DataItem = {
   listId: number;
   listTitle: string;
@@ -80,7 +79,6 @@ export type PageData = {
   total: number;
   totalPages: number;
 };
-// page=1&size=20&sort_by=popular&name_sort_by=all&org_sort_by=all&data_type_sort_by=all&token_count_sort_by=all&status_sort_by=all
 
 const fetchData = async (page: number, sortBy: string, query: string) => {
   const response = await fetch(
@@ -104,49 +102,19 @@ export const TabContent = () => {
     queryKey: ["data", currentPage, currentTab, query],
     queryFn: () => fetchData(currentPage, currentTab, query),
   });
-  // const data = {
-  //   items: [
-  //     {
-  //       listId: 3046071,
-  //       listTitle: "국민연금공단_국민연금 가입 사업장 내역",
-  //       orgNm: "국민연금공단",
-  //       tokenCount: 803,
-  //       hasGeneratedDoc: true,
-  //       updatedAt: "2025-07-24T00:00:00",
-  //       dataType: "API",
-  //     },
-  //   ],
-
-  //   total: 0,
-  //   page: 0,
-  //   size: 0,
-  //   totalPages: 0,
-  //   hasNext: true,
-  //   hasPrev: true,
-  // };
-
-  // const isLoading = false; // 데이터 로딩 상태를 나타내는 변수
-
-  // const refetch = () => {
-  //   console.log("데이터를 다시 가져옵니다...");
-  // };
-
-  // console.log("현재 페이지 데이터:", data);
 
   const handlePageChange = (page: number) => {
-    // console.log(`페이지 ${page}로 이동`);
     setCurrentPage(page);
   };
 
   const handleTabChange = (tab: string) => {
-    // console.log(`탭 변경: ${tab}`);
     setCurrentTab(tab);
-    setCurrentPage(1); // 탭 변경 시 첫 페이지로 리셋
+    setCurrentPage(1);
   };
 
   const handleQueryChange = (newQuery: string) => {
     setQuery(newQuery);
-    setCurrentPage(1); // 검색 시 첫 페이지로 리셋
+    setCurrentPage(1);
   };
 
   return (
@@ -237,7 +205,6 @@ const humanizeKo = (dateInput: string | Date, nowInput: Date = new Date()) => {
 
   let seconds = Math.floor((now.getTime() - dt.getTime()) / 1000);
 
-  // 미래
   if (seconds < 0) {
     seconds = -seconds;
     if (seconds < 60) return "곧";
@@ -251,7 +218,6 @@ const humanizeKo = (dateInput: string | Date, nowInput: Date = new Date()) => {
     return `${Math.floor(days / 365)}년 후`;
   }
 
-  // 과거
   if (seconds < 60) return "방금 전";
   const mins = Math.floor(seconds / 60);
   if (mins < 60) return `${mins}분 전`;
@@ -462,9 +428,6 @@ export function DataTableDemo({ data, isLoading }: DataTableDemoProps) {
                             header.getContext()
                           )}
 
-                      {/* <button className="">
-                        <BiSortAlt2 className="text-gray-500 hover:text-black cursor-pointer" />
-                      </button> */}
                     </TableHead>
                   );
                 })}
@@ -538,7 +501,6 @@ import {
 } from "@/components/ui/pagination";
 import { Skeleton } from "./ui/skeleton";
 import { getVariantStyles, StatusBadge } from "./statusBadge";
-// import { useRouter } from "next/navigation";
 
 interface PaginationDemoProps {
   data: PageData | undefined;
@@ -557,7 +519,6 @@ export function PaginationDemo({
   const total = data?.total || 0;
 
   const handlePageChange = (page: number) => {
-    // console.log(`페이지 ${page}로 이동`);
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
     }
@@ -565,7 +526,7 @@ export function PaginationDemo({
 
   const renderPageNumbers = () => {
     const pages = [] as React.ReactNode[];
-    const blockSize = 10; // 중앙 숫자를 10개 단위 블록으로 표시
+    const blockSize = 10;
 
     const currentBlockStart =
       Math.floor((currentPage - 1) / blockSize) * blockSize + 1;
