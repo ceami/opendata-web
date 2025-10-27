@@ -28,7 +28,7 @@ export const Footer = () => {
           className="px-2  cursor-pointer hover:text-blue-600 transition-colors duration-300"
           onClick={() => router.push("/licenses")}
         >
-          라이선스
+          Licenses
         </button>
       </div>
     </div>

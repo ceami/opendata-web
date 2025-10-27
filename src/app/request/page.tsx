@@ -61,20 +61,18 @@ export const RequestDocks = () => {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-
+      console.log(data);
       return data;
     },
     onSuccess: (data) => {
-      if (data.message === "저장되었습니다.") {
-        setInputValue("");
+      setInputValue("");
+      if (data.message === "저장완료") {
         toast.success("문서 요청이 완료되었습니다.");
       } else {
-        setInputValue("");
         toast.error("문서 요청에 실패했습니다.");
       }
     },
-    onError: (error) => {
-    },
+    onError: (error) => {},
   });
 
   const submitOnce = useMemo(
