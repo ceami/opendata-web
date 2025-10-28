@@ -5,7 +5,7 @@
       "name": "beanie",
       "version": "",
       "type": "python",
-      "homepage": "https://github.com/beanie-org/beanie",
+      "homepage": "https://github.com/BeanieODM/beanie",
       "author": "Roman Right",
       "license": "Apache License 2.0"
     },
@@ -23,14 +23,6 @@
       "type": "python",
       "homepage": "https://github.com/tiangolo/fastapi",
       "author": "Sebastian Ramirez",
-      "license": "MIT License"
-    },
-    {
-      "name": "fastapi-pagination",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/uriyyo/fastapi-pagination",
-      "author": "Yuriy Markov",
       "license": "MIT License"
     },
     {
@@ -64,6 +56,14 @@
       "homepage": "https://github.com/numpy/numpy",
       "author": "NumPy Developers",
       "license": "NumPy License (BSD-like)"
+    },
+    {
+      "name": "pydantic",
+      "version": "",
+      "type": "python",
+      "homepage": "https://github.com/pydantic/pydantic",
+      "author": "Pydantic",
+      "license": "MIT License"
     },
     {
       "name": "pydantic-settings",
@@ -106,6 +106,14 @@
       "license": "MIT License"
     },
     {
+      "name": "starlette",
+      "version": "",
+      "type": "python",
+      "homepage": "https://github.com/encode/starlette",
+      "author": "Laurent Savaëte",
+      "license": "BSD 3-Clause License"
+    },
+    {
       "name": "tomli",
       "version": "",
       "type": "python",
@@ -128,6 +136,14 @@
       "homepage": "https://github.com/encode/uvicorn",
       "author": "Encode OSS Ltd",
       "license": "BSD 3-Clause License"
+    },
+    {
+      "name": "modelcontextprotocol/sdk",
+      "version": "",
+      "type": "infra",
+      "homepage": "https://github.com/mongodb/mongo",
+      "author": "MongoDB, Inc.",
+      "license": "Server Side Public License (SSPL) 1.0"
     },
     {
       "name": "MongoDB",
@@ -186,10 +202,10 @@
       "license": "Apache License 2.0"
     },
     {
-      "name": "Docker",
+      "name": "Docker Compose",
       "version": "",
       "type": "infra",
-      "homepage": "https://github.com/docker/docker",
+      "homepage": "https://github.com/docker/compose",
       "author": "Docker, Inc.",
       "license": "Apache License 2.0"
     }
