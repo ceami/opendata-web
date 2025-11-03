@@ -137,14 +137,7 @@
       "author": "Encode OSS Ltd",
       "license": "BSD 3-Clause License"
     },
-    {
-      "name": "modelcontextprotocol/sdk",
-      "version": "",
-      "type": "infra",
-      "homepage": "https://github.com/mongodb/mongo",
-      "author": "MongoDB, Inc.",
-      "license": "Server Side Public License (SSPL) 1.0"
-    },
+ 
     {
       "name": "MongoDB",
       "version": "",
