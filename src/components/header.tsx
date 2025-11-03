@@ -31,14 +31,16 @@ export const Header = () => {
           OpenData
         </button>
         <div className="flex items-center gap-2">
-          <button
+          <a
+            href="/file/OpenData.pdf"
+            download="OpenData.pdf"
             className="text-[18px] px-2 font-bold cursor-pointer hover:text-blue-600 transition-colors duration-300"
-            onClick={() =>
-              window.open("https://youtu.be/QmrmtWgBMwo?si=RhYuW1igiJ-Pkfph")
-            }
+            // onClick={() =>
+            //   window.open("https://youtu.be/QmrmtWgBMwo?si=RhYuW1igiJ-Pkfph")
+            // }
           >
             사용 방법
-          </button>
+          </a>
           <button
             className="text-[18px] px-2 font-bold cursor-pointer hover:text-blue-600 transition-colors duration-300"
             onClick={() =>
