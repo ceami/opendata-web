@@ -52,7 +52,7 @@ export function ContactModal({ trigger }: ContactModalProps) {
 
     const subject = encodeURIComponent(title);
     const body = encodeURIComponent(content);
-    const mailtoLink = `mailto:support@ezrnd.co.kr?subject=${subject}&body=${body}&email=${email}`;
+    const mailtoLink = `mailto:admin@aeriis.kr?subject=${subject}&body=${body}&email=${email}`;
 
     window.open(mailtoLink);
 
