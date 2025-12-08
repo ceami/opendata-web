@@ -41,26 +41,45 @@ export function ContactModal({ trigger }: ContactModalProps) {
   const [email, setEmail] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!title.trim() || !content.trim() || !email.trim()) {
-    return;
+      return;
     }
 
     setIsSubmitting(true);
 
-    const subject = encodeURIComponent(title);
-    const body = encodeURIComponent(content);
-    const mailtoLink = `mailto:admin@aeriis.kr?subject=${subject}&body=${body}&email=${email}`;
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: title.trim(),
+          content: content.trim(),
+          email: email.trim(),
+        }),
+      });
 
-    window.open(mailtoLink);
+      const data = await response.json();
 
-    setTitle("");
-    setContent("");
-    setEmail("");
-    setIsSubmitting(false);
-    setOpen(false);
+      if (response.ok && data.success) {
+        setTitle("");
+        setContent("");
+        setEmail("");
+        setOpen(false);
+        alert('문의가 성공적으로 전송되었습니다!');
+      } else {
+        alert('문의 전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      }
+    } catch (error) {
+      console.error('Contact form submission error:', error);
+      alert('네트워크 오류가 발생했습니다. 인터넷 연결을 확인하고 다시 시도해주세요.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
