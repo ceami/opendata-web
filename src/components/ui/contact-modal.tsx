@@ -29,7 +29,7 @@ import { Button } from "./button";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
 import { Label } from "./label";
-
+import toast from "react-hot-toast";
 interface ContactModalProps {
   trigger: React.ReactNode;
 }
@@ -51,10 +51,10 @@ export function ContactModal({ trigger }: ContactModalProps) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
+      const response = await fetch("/api/contact", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           title: title.trim(),
@@ -70,13 +70,15 @@ export function ContactModal({ trigger }: ContactModalProps) {
         setContent("");
         setEmail("");
         setOpen(false);
-        alert('문의가 성공적으로 전송되었습니다!');
+        toast.success("문의가 성공적으로 전송되었습니다!");
       } else {
-        alert('문의 전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        toast.error("문의 전송에 실패했습니다. 잠시 후 다시 시도해주세요.");
       }
     } catch (error) {
-      console.error('Contact form submission error:', error);
-      alert('네트워크 오류가 발생했습니다. 인터넷 연결을 확인하고 다시 시도해주세요.');
+      console.error("Contact form submission error:", error);
+      toast.error(
+        "네트워크 오류가 발생했습니다. 인터넷 연결을 확인하고 다시 시도해주세요."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -145,4 +147,3 @@ export function ContactModal({ trigger }: ContactModalProps) {
     </Dialog>
   );
 }
-
