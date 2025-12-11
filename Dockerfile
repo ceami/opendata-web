@@ -11,35 +11,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# FROM node:20
-
-# RUN npm install -g pnpm
-
-# WORKDIR /app/
-
-# COPY package.json .
-# COPY . .
-
-# RUN pnpm install
-
-# RUN pnpm run dep:gen
-
-# CMD ["pnpm","run","start"]
-
-
 FROM node:20
 
 RUN npm install -g pnpm
 
 WORKDIR /app/
 
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
-
+COPY package.json .
 COPY . .
+
+RUN pnpm install
+
 RUN pnpm run dep:gen
-RUN pnpm run build
 
-EXPOSE 3000
-
-CMD ["npx", "next", "start"]
+CMD ["pnpm","run","start"]
