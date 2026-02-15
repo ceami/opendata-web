@@ -29,7 +29,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "incremental": true,
     "plugins": [
       {
@@ -39,6 +39,24 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@/app/*": [
+        "src/app/*"
+      ],
+      "@/views/*": [
+        "src/views/*"
+      ],
+      "@/widgets/*": [
+        "src/widgets/*"
+      ],
+      "@/features/*": [
+        "src/features/*"
+      ],
+      "@/entities/*": [
+        "src/entities/*"
+      ],
+      "@/shared/*": [
+        "src/shared/*"
       ]
     }
   },

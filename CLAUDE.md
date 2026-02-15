@@ -97,6 +97,20 @@ For project structure and layers: `feature-sliced-design` skill.
 
 - `tailwind css v4` and `shadcn` in `@/shared/ui/` 
 
+### Architecture (Feature-Sliced Design)
+
+프로젝트는 FSD v2.1 아키텍처를 따릅니다.
+
+```
+src/
+├── app/        # Next.js 라우팅 + 앱 전역 (layout, providers, styles)
+├── views/      # 페이지별 비즈니스 로직 (HomeView, DocumentDetailView 등)
+├── widgets/    # 재사용 가능한 큰 UI 블록 (Header, Footer, DocumentList 등)
+├── features/   # 사용자 인터랙션 기능 (contact, document-list, document-request)
+├── entities/   # 도메인 엔티티 (document, license)
+└── shared/     # UI Kit, lib, config (shared만 FSD 레이어 import 불가)
+```
+
 ### Path aliases
 
 - With FSD: `@/app`, `@/views`, `@/widgets`, `@/features`, `@/entities`, `@/shared` (see feature-sliced-design skill)

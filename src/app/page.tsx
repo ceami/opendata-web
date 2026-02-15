@@ -14,16 +14,9 @@
  * limitations under the License.
  */
 "use client";
-import * as React from "react";
 
-import { Content } from "@/components/content";
-import { ContentHeader } from "@/components/content-header";
+import { HomeView } from "@/views/home";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col items-center w-full pt-10">
-      <ContentHeader />
-      <Content />
-    </div>
-  );
+export default function HomePage() {
+  return <HomeView />;
 }

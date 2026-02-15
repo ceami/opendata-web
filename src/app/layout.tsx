@@ -18,10 +18,10 @@ import Script from "next/script";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
+import { Header } from "@/widgets/header";
+import { Footer } from "@/widgets/footer";
 import { QueryProvider } from "./provider/query-provider";
-import { DataTableProvider } from "@/contexts/DataTableContext";
+import { DataTableProvider } from "@/features/document-list";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });

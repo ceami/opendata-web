@@ -1,206 +1,21 @@
 {
-  "generated_at": "2025-10-15T19:30:00+09:00",
+  "generated_at": "2026-02-15T23:42:11.929017",
   "packages": [
     {
-      "name": "beanie",
-      "version": "",
+      "name": "pip",
+      "version": "24.3.1",
       "type": "python",
-      "homepage": "https://github.com/BeanieODM/beanie",
-      "author": "Roman Right",
-      "license": "Apache License 2.0"
+      "homepage": "https://pip.pypa.io/",
+      "author": "",
+      "license": "Unknown"
     },
     {
-      "name": "elasticsearch",
-      "version": "",
+      "name": "setuptools",
+      "version": "75.6.0",
       "type": "python",
-      "homepage": "https://github.com/elastic/elasticsearch-py",
-      "author": "Elasticsearch BV",
-      "license": "Apache License 2.0"
-    },
-    {
-      "name": "fastapi",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/tiangolo/fastapi",
-      "author": "Sebastian Ramirez",
-      "license": "MIT License"
-    },
-    {
-      "name": "gunicorn",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/benoitc/gunicorn",
-      "author": "Benoît Chesneau",
-      "license": "MIT License"
-    },
-    {
-      "name": "loguru",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/Delgan/loguru",
-      "author": "Delgan",
-      "license": "MIT License"
-    },
-    {
-      "name": "motor",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/mongodb/motor",
-      "author": "MongoDB, Inc.",
-      "license": "Apache License 2.0"
-    },
-    {
-      "name": "numpy",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/numpy/numpy",
-      "author": "NumPy Developers",
-      "license": "NumPy License (BSD-like)"
-    },
-    {
-      "name": "pydantic",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/pydantic/pydantic",
-      "author": "Pydantic",
-      "license": "MIT License"
-    },
-    {
-      "name": "pydantic-settings",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/pydantic/pydantic-settings",
-      "author": "Pydantic",
-      "license": "MIT License"
-    },
-    {
-      "name": "pymilvus",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/milvus-io/pymilvus",
-      "author": "Milvus Authors",
-      "license": "Apache License 2.0"
-    },
-    {
-      "name": "pymongo",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/mongodb/mongo-python-driver",
-      "author": "MongoDB, Inc.",
-      "license": "Apache License 2.0"
-    },
-    {
-      "name": "sentence-transformers",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/UKPLab/sentence-transformers",
-      "author": "Nils Reimers",
-      "license": "Apache License 2.0"
-    },
-    {
-      "name": "slowapi",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/laurents/slowapi",
-      "author": "Laurent Savaëte",
-      "license": "MIT License"
-    },
-    {
-      "name": "starlette",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/encode/starlette",
-      "author": "Laurent Savaëte",
-      "license": "BSD 3-Clause License"
-    },
-    {
-      "name": "tomli",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/hukkin/tomli",
-      "author": "Taneli Hukkinen",
-      "license": "MIT License"
-    },
-    {
-      "name": "tqdm",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/tqdm/tqdm",
-      "author": "noamraph et al.",
-      "license": "Mozilla Public License 2.0"
-    },
-    {
-      "name": "uvicorn",
-      "version": "",
-      "type": "python",
-      "homepage": "https://github.com/encode/uvicorn",
-      "author": "Encode OSS Ltd",
-      "license": "BSD 3-Clause License"
-    },
- 
-    {
-      "name": "MongoDB",
-      "version": "",
-      "type": "infra",
-      "homepage": "https://github.com/mongodb/mongo",
-      "author": "MongoDB, Inc.",
-      "license": "Server Side Public License (SSPL) 1.0"
-    },
-    {
-      "name": "Milvus",
-      "version": "",
-      "type": "infra",
-      "homepage": "https://github.com/milvus-io/milvus",
-      "author": "Milvus Authors",
-      "license": "Apache License 2.0"
-    },
-    {
-      "name": "Elasticsearch",
-      "version": "",
-      "type": "infra",
-      "homepage": "https://github.com/elastic/elasticsearch",
-      "author": "Elasticsearch BV",
-      "license": "Elastic License 2.0"
-    },
-    {
-      "name": "etcd",
-      "version": "",
-      "type": "infra",
-      "homepage": "https://github.com/etcd-io/etcd",
-      "author": "The etcd Authors",
-      "license": "Apache License 2.0"
-    },
-    {
-      "name": "MinIO",
-      "version": "",
-      "type": "infra",
-      "homepage": "https://github.com/minio/minio",
-      "author": "MinIO, Inc.",
-      "license": "GNU Affero General Public License v3.0"
-    },
-    {
-      "name": "Python",
-      "version": "",
-      "type": "runtime",
-      "homepage": "https://github.com/python/cpython",
-      "author": "Python Software Foundation",
-      "license": "Python Software Foundation License"
-    },
-    {
-      "name": "uv",
-      "version": "",
-      "type": "tool",
-      "homepage": "https://github.com/astral-sh/uv",
-      "author": "Astral Software",
-      "license": "Apache License 2.0"
-    },
-    {
-      "name": "Docker Compose",
-      "version": "",
-      "type": "infra",
-      "homepage": "https://github.com/docker/compose",
-      "author": "Docker, Inc.",
-      "license": "Apache License 2.0"
+      "homepage": "",
+      "author": "",
+      "license": "Unknown"
     }
   ]
 }

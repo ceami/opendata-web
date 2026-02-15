@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { Licenses } from "@/components/licenses";
-import {
+import fs from "fs";
+import path from "path";
+import { LicensesView } from "@/views/licenses";
+import type {
   FrontendLicenses,
   BackendLicenses,
   LicenseReportPackage,
   LicenseInfo,
-} from "@/types/license";
-import fs from "fs";
-import path from "path";
+} from "@/entities/license";
 
 function convertLicenseReportToLicenseInfo(
   packages: LicenseReportPackage[]
@@ -60,7 +59,6 @@ async function getLicensesData(): Promise<{
       };
     }
 
-    // 백엔드 라이선스 데이터 로드
     let backendLicenses: BackendLicenses | undefined;
     const backendPath = path.join(publicDir, "backend_licenses.json");
     if (fs.existsSync(backendPath)) {
@@ -80,7 +78,7 @@ export default async function LicensesPage() {
 
   return (
     <div className="w-full h-full my-20 max-w-[1200px] mx-auto space-y-10">
-      <Licenses
+      <LicensesView
         frontendLicenses={frontendLicenses}
         backendLicenses={backendLicenses}
       />
