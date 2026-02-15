@@ -1,0 +1,15 @@
+{
+  "version": 3,
+  "skills": {
+    "vercel-composition-patterns": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/composition-patterns/SKILL.md",
+      "skillFolderHash": "bf90d0a4b83ea054653350f9c67f6de235d3a368",
+      "installedAt": "2026-02-15T12:48:40.219Z",
+      "updatedAt": "2026-02-15T12:48:40.219Z"
+    }
+  },
+  "dismissed": {}
+}

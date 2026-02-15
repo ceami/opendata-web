@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell:*)",
+      "Bash(git add:*)",
+      "Bash(bun run build:*)",
+      "Bash(bun run tsc:*)",
+      "Bash(cat:*)",
+      "Bash(wc:*)",
+      "Bash(ls:*)",
+      "Bash(/Users/unerue/Projects/ezrnd-flow/src/features/related-works/ui/document-detail-panel.tsx:*)",
+      "Bash(/Users/unerue/Projects/ezrnd-flow/src/features/related-works/ui/history-list.tsx:*)",
+      "Bash(python3:*)"
+    ]
+  }
+}
