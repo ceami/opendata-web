@@ -128,10 +128,9 @@ export const columns: ColumnDef<DataItem>[] = [
 
 interface DocumentTableProps {
   data: PageData | undefined;
-  isLoading: boolean;
 }
 
-export function DocumentTable({ data, isLoading }: DocumentTableProps) {
+export function DocumentTable({ data }: DocumentTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] =
     React.useState<ColumnFiltersState>([]);
@@ -223,18 +222,7 @@ export function DocumentTable({ data, isLoading }: DocumentTableProps) {
             ))}
           </TableHeader>
           <TableBody className="">
-            {isLoading ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  <Skeleton className="w-full h-24 mb-2" />
-                  <Skeleton className="w-full h-24 mb-2" />
-                  <Skeleton className="w-full h-24 mb-2" />
-                </TableCell>
-              </TableRow>
-            ) : table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows?.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -272,6 +260,44 @@ export function DocumentTable({ data, isLoading }: DocumentTableProps) {
                 </TableCell>
               </TableRow>
             )}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+}
+
+export function DocumentTableSkeleton() {
+  return (
+    <div className="w-full">
+      <div className="">
+        <DropdownMenu>
+          <DropdownMenuContent align="end" />
+        </DropdownMenu>
+      </div>
+      <div className="">
+        <Table className="w-full ">
+          <TableHeader className="bg-gray-100 text-[18px] font-medium  ">
+            <TableRow>
+              {columns.map((col, index) => (
+                <TableHead
+                  key={String(col.accessorKey ?? index)}
+                  className="py-3"
+                />
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody className="">
+            <TableRow>
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center"
+              >
+                <Skeleton key="1" className="w-full h-24 mb-2" />
+                <Skeleton key="2" className="w-full h-24 mb-2" />
+                <Skeleton key="3" className="w-full h-24 mb-2" />
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </div>

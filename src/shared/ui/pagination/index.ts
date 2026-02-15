@@ -2,6 +2,7 @@ export {
   Pagination,
   PaginationContent,
   PaginationLink,
+  PaginationLinkCurrent,
   PaginationItem,
   PaginationPrevious,
   PaginationNext,

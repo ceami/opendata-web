@@ -17,7 +17,7 @@
 
 import React, {
   createContext,
-  useContext,
+  use,
   useState,
   useEffect,
 } from "react";
@@ -94,7 +94,7 @@ export const DataTableProvider = ({
 };
 
 export const useDataTable = () => {
-  const context = useContext(DataTableContext);
+  const context = use(DataTableContext);
   if (!context) {
     throw new Error("useDataTable must be used within DataTableProvider");
   }

@@ -20,6 +20,7 @@ import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { Header } from "@/widgets/header";
 import { Footer } from "@/widgets/footer";
+import { FloatingBadge } from "@/widgets/floating-badge";
 import { QueryProvider } from "./provider/query-provider";
 import { DataTableProvider } from "@/features/document-list";
 import "./globals.css";
@@ -76,6 +77,7 @@ export default function RootLayout({
               <Header />
               <main className="flex-1 pt-10 ">{children}</main>
               <Footer />
+              <FloatingBadge />
             </div>
           </DataTableProvider>
         </QueryProvider>

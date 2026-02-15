@@ -32,10 +32,10 @@ import { Label } from "@/shared/ui/label";
 import toast from "react-hot-toast";
 
 interface ContactModalProps {
-  trigger: React.ReactNode;
+  children: React.ReactNode;
 }
 
-export function ContactModal({ trigger }: ContactModalProps) {
+export function ContactModal({ children }: ContactModalProps) {
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
@@ -87,7 +87,7 @@ export function ContactModal({ trigger }: ContactModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
           <DialogTitle className="text-xl">문의하기</DialogTitle>

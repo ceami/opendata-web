@@ -55,16 +55,14 @@ export function Header() {
           >
             + 문서 요청
           </Button>
-          <ContactModal
-            trigger={
-              <Button
-                variant="outline"
-                className="bg-[#1565c0] text-white cursor-pointer font-semibold duration-300 transition-colors px-[22px] py-[8px]"
-              >
-                문의하기
-              </Button>
-            }
-          />
+          <ContactModal>
+            <Button
+              variant="outline"
+              className="bg-[#1565c0] text-white cursor-pointer font-semibold duration-300 transition-colors px-[22px] py-[8px]"
+            >
+              문의하기
+            </Button>
+          </ContactModal>
         </div>
       </div>
     </div>

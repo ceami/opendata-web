@@ -21,6 +21,7 @@ import {
   PaginationContent,
   PaginationItem,
   PaginationLink,
+  PaginationLinkCurrent,
 } from "@/shared/ui/pagination";
 import type { PageData } from "@/entities/document";
 
@@ -28,14 +29,12 @@ interface DocumentPaginationProps {
   data: PageData | undefined;
   currentPage: number;
   onPageChange: (page: number) => void;
-  isLoading: boolean;
 }
 
 export function DocumentPagination({
   data,
   currentPage,
   onPageChange,
-  isLoading,
 }: DocumentPaginationProps) {
   const totalPages = data?.totalPages || 1;
 
@@ -57,18 +56,21 @@ export function DocumentPagination({
     );
 
     for (let i = currentBlockStart; i <= currentBlockEnd; i++) {
+      const isCurrentPage = i === currentPage;
+      const LinkComponent = isCurrentPage
+        ? PaginationLinkCurrent
+        : PaginationLink;
       pages.push(
         <PaginationItem key={i}>
-          <PaginationLink
+          <LinkComponent
             href="#"
-            isActive={i === currentPage}
             onClick={(e) => {
               e.preventDefault();
               handlePageChange(i);
             }}
           >
             {i}
-          </PaginationLink>
+          </LinkComponent>
         </PaginationItem>
       );
     }
@@ -151,7 +153,6 @@ export function DocumentPagination({
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-      {isLoading && <div className="text-sm text-muted-foreground"></div>}
     </div>
   );
 }

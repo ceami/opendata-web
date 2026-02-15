@@ -22,7 +22,7 @@ import { RxMagnifyingGlass } from "react-icons/rx";
 import { useDataTable } from "../model/useDataTable";
 import { cn } from "@/shared/lib/utils";
 import { fetchDocumentList } from "@/entities/document";
-import { DocumentTable } from "./document-table";
+import { DocumentTable, DocumentTableSkeleton } from "./document-table";
 import { DocumentPagination } from "./document-pagination";
 
 export function DocumentTabContent() {
@@ -109,19 +109,26 @@ export function DocumentTabContent() {
         </TabsList>
         <TabsContent value="popular" className="w-full max-w-[1200px] w-full ">
           <div className="w-full bg-white">
-            <DocumentTable data={data} isLoading={isLoading} />
+            {isLoading ? (
+              <DocumentTableSkeleton />
+            ) : (
+              <DocumentTable data={data} />
+            )}
           </div>
         </TabsContent>
         <TabsContent value="trending" className="w-full max-w-[1200px] w-full">
           <div className="w-full bg-white">
-            <DocumentTable data={data} isLoading={isLoading} />
+            {isLoading ? (
+              <DocumentTableSkeleton />
+            ) : (
+              <DocumentTable data={data} />
+            )}
           </div>
         </TabsContent>
         <DocumentPagination
           data={data}
           currentPage={currentPage}
           onPageChange={handlePageChange}
-          isLoading={isLoading}
         />
       </Tabs>
     </div>
