@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @custom-variant dark (&:is(.dark *));
@@ -56,38 +58,40 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --content-max-width: 1024px;
+  --radius: 0.125rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: oklch(0.17 0.01 250);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.17 0.01 250);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.17 0.01 250);
+  /* Primary: 따뜻한 인디고 블루 */
+  --primary: oklch(0.48 0.16 262);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.965 0.01 250);
+  --secondary-foreground: oklch(0.24 0.02 262);
+  --muted: oklch(0.965 0.008 250);
+  --muted-foreground: oklch(0.48 0.02 250);
+  --accent: oklch(0.95 0.02 262);
+  --accent-foreground: oklch(0.38 0.12 262);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --border: oklch(0.91 0.01 250);
+  --input: oklch(0.91 0.01 250);
+  --ring: oklch(0.55 0.15 262);
+  --chart-1: oklch(0.55 0.18 262);
+  --chart-2: oklch(0.6 0.12 200);
+  --chart-3: oklch(0.55 0.14 145);
+  --chart-4: oklch(0.72 0.17 75);
+  --chart-5: oklch(0.65 0.2 25);
   --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.17 0.01 250);
+  --sidebar-primary: oklch(0.48 0.16 262);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-accent: oklch(0.95 0.02 262);
+  --sidebar-accent-foreground: oklch(0.24 0.02 262);
+  --sidebar-border: oklch(0.91 0.01 250);
+  --sidebar-ring: oklch(0.55 0.15 262);
 }
 
 .dark {
@@ -125,11 +129,45 @@
 }
 
 @layer base {
+  html {
+    overflow-y: scroll; /* 모든 페이지에서 스크롤바 일관성 유지 */
+    scrollbar-gutter: stable; /* 스크롤바 영역 항상 확보 → 모달 열릴 때 body overflow:hidden 되어도 레이아웃 시프트 없음 */
+  }
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+  @media (min-width: 768px) {
+    body {
+      font-size: 15px;
+    }
+  }
+  /* 타이포그래피 스케일 - 일관된 폰트 크기 */
+  h1 {
+    @apply font-bold tracking-tight;
+    font-size: 1.25rem;
+    line-height: 1.3;
+  }
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+  h2 {
+    @apply font-semibold tracking-tight;
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+  h3 {
+    @apply font-semibold;
+    font-size: 1.125rem;
+    line-height: 1.4;
   }
 }
 
@@ -141,17 +179,15 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #e0e0e0;
-  border-radius: 10px;
+  background: oklch(0.94 0.01 250);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #2ea7ed;
-  border-radius: 4px;
+  background: oklch(0.65 0.12 262);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+  background: oklch(0.5 0.14 262);
 }
 
 .custom-scrollbar::-webkit-scrollbar-button {
@@ -161,3 +197,4 @@
 .custom-scrollbar::-webkit-scrollbar-corner {
   background: transparent;
 }
+

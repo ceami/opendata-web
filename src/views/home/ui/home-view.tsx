@@ -20,7 +20,7 @@ import { DocumentList } from "@/widgets/document-list";
 
 export function HomeView() {
   return (
-    <div className="flex flex-col items-center w-full pt-10">
+    <div className="flex flex-col items-center w-full pt-4">
       <HomeHero />
       <DocumentList />
     </div>

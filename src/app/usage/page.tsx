@@ -13,16 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { cn } from "@/shared/lib/utils"
+"use client";
 
-function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="skeleton"
-      className={cn("bg-accent animate-pulse rounded-md", className)}
-      {...props}
-    />
-  )
+import { UsageView } from "@/views/usage";
+
+export default function UsagePage() {
+  return <UsageView />;
 }
-
-export { Skeleton }

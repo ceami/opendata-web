@@ -63,7 +63,7 @@ export function DocumentDetailView({ slug }: DocumentDetailViewProps) {
 
   if (isPending) {
     return (
-      <div className="w-full min-h-calc(100vh-100px) h-full max-w-[1200px] mx-auto space-y-8 pb-40">
+      <div className="w-full min-h-calc(100vh-100px) h-full max-w-[var(--content-max-width)] mx-auto space-y-8 pb-40">
         <div className="w-full h-full flex items-center justify-center"></div>
       </div>
     );
@@ -71,8 +71,8 @@ export function DocumentDetailView({ slug }: DocumentDetailViewProps) {
 
   if (isError) {
     return (
-      <div className="w-full min-h-calc(100vh-100px)  flex items-center justify-center max-w-[1200px] mx-auto ">
-        <div className="rounded-md bg-transparent  p-20  text-center w-full border border-gray-300  ">
+      <div className="w-full min-h-calc(100vh-100px)  flex items-center justify-center max-w-[var(--content-max-width)] mx-auto ">
+        <div className="bg-muted/50 p-20 text-center w-full text-muted-foreground">
           데이터 조회 실패
         </div>
       </div>
@@ -80,7 +80,7 @@ export function DocumentDetailView({ slug }: DocumentDetailViewProps) {
   }
 
   return (
-    <div className="w-full h-full max-w-[1200px] mx-auto space-y-8 pb-40">
+    <div className="w-full h-full max-w-[var(--content-max-width)] mx-auto space-y-6 md:space-y-8 pb-32 md:pb-40 px-0">
       <DetailHeaders
         description={data?.description}
         listTitle={data?.listTitle}
@@ -188,50 +188,50 @@ function DetailHeaders({
   };
 
   return (
-    <div className="w-full h-auto  space-y-4   border border-gray-300 rounded-[5px] bg-white  px-5 py-4">
+    <div className="w-full h-auto space-y-4 bg-background px-4 md:px-5 py-4">
       <div>
         <StatusBadge variant={dataType}>
           {getVariantStyles(dataType).title}
         </StatusBadge>
       </div>
-      <div className="flex justify-between relative">
-        <div className="flex flex-col justify-between">
-          <div className="flex items-center ">
-            <h1 className="text-[24px] font-bold">{listTitle}</h1>
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-3 relative">
+        <div className="flex flex-col justify-between min-w-0">
+          <div className="flex items-start gap-2 break-words">
+            <h1 className="text-lg md:text-xl font-bold text-foreground break-words">{listTitle}</h1>
             <IoCopyOutline
               size={20}
-              className="inline-block ml-2  text-gray-500 cursor-pointer hover:text-gray-700"
+              className="inline-block ml-2 text-muted-foreground cursor-pointer hover:text-foreground transition-colors"
               onClick={handleShare}
             />
           </div>
           <div>
             <button
               onClick={() => window.open(detailUrl, "_blank")}
-              className="text-blue-600 text-[16px] cursor-pointer  hover:text-blue-800 "
+              className="text-primary text-sm md:text-base cursor-pointer hover:text-primary/90 underline-offset-2 hover:underline transition-colors break-all text-left"
             >
               {detailUrl}
             </button>
           </div>
         </div>
         {generatedStatus ? (
-          <div className="place-items-start flex items-center gap-2  bg-[#f1f3f4] h-[30px] border  border-gray-500 border-px rounded-[5px] px-2 py-1">
-            <BiCheckCircle size={20} className="text-green-500" />
-            <p className="text-black">생성완료</p>
+          <div className="place-items-start flex items-center gap-2 bg-muted h-8 px-2.5 py-1 shrink-0 self-start">
+            <BiCheckCircle size={18} className="text-green-600 shrink-0" />
+            <p className="text-sm font-medium text-foreground">생성완료</p>
           </div>
         ) : (
-          <div className="place-items-start flex items-center gap-2  bg-[#f1f3f4] h-[30px] border  border-gray-500 border-px rounded-[5px] px-2 py-1">
-            <BiErrorCircle size={20} className="text-red-500" />
-            <p className="text-black">생성안됨</p>
+          <div className="place-items-start flex items-center gap-2 bg-muted h-8 px-2.5 py-1 shrink-0 self-start">
+            <BiErrorCircle size={18} className="text-destructive shrink-0" />
+            <p className="text-sm font-medium text-foreground">생성안됨</p>
           </div>
         )}
       </div>
 
-      <div className="flex items-center text-[16px] justify-end py-2">
+      <div className="flex flex-col sm:flex-row sm:items-center text-xs md:text-sm text-muted-foreground sm:justify-end py-2 gap-0.5">
         <p>등록일: {createdAtDate}</p>
-        <p className="ml-1">(마지막 업데이트: {updatedAtDate})</p>
+        <p className="sm:ml-1">(마지막 업데이트: {updatedAtDate})</p>
       </div>
 
-      <div className="text-[18px] whitespace-pre-line break-words">
+      <div className="text-base leading-relaxed whitespace-pre-line break-words">
         {description || "설명이 없습니다."}
       </div>
 
@@ -239,16 +239,16 @@ function DetailHeaders({
         <InfoTable tableData={tableData} />
       </div>
 
-      <div className="flex items-center text-[16px]">
-        <div className="flex flex-wrap  gap-2 ml-2">
+      <div className="flex items-center text-sm">
+        <div className="flex flex-wrap gap-2 ml-2">
           {keywords?.map((keyword: string, index: number) => (
             <span
               key={index}
-              className="bg-[#f1f3f4] text-black border  border-[#a6a9ac] border-px px-2 py-1 rounded text-[16px]"
+              className="bg-muted text-foreground px-2.5 py-1 text-sm"
             >
               #{keyword}
             </span>
-          )) || <span>키워드가 없습니다.</span>}
+          )) || <span className="text-muted-foreground">키워드가 없습니다.</span>}
         </div>
       </div>
     </div>
@@ -257,38 +257,40 @@ function DetailHeaders({
 
 function InfoTable({ tableData }: { tableData: TableItem[] }) {
   return (
-    <div className="my-2 w-full text-sm">
-      {tableData
-        .reduce(
-          (rows: Array<[TableItem, TableItem | null]>, item, index) => {
-            if (index % 2 === 0) {
-              rows.push([item, tableData[index + 1] || null]);
-            }
-            return rows;
-          },
-          [] as Array<[TableItem, TableItem | null]>
-        )
-        .map((pair, rowIndex) => (
-          <div
-            key={rowIndex}
-            className="flex border border-b border-white text-[16px]"
-          >
-            <div className="w-1/5 bg-[#f1f3f4] p-2 text-center text-[black]">
-              {pair[0].label}
+    <div className="my-2 w-full text-xs md:text-sm overflow-x-auto">
+      <div className="min-w-[320px]">
+        {tableData
+          .reduce(
+            (rows: Array<[TableItem, TableItem | null]>, item, index) => {
+              if (index % 2 === 0) {
+                rows.push([item, tableData[index + 1] || null]);
+              }
+              return rows;
+            },
+            [] as Array<[TableItem, TableItem | null]>
+          )
+          .map((pair, rowIndex) => (
+            <div
+              key={rowIndex}
+              className="flex border-b border-border/40 text-sm"
+            >
+              <div className="w-1/5 min-w-[70px] bg-muted p-2 md:p-2.5 text-center font-medium text-foreground">
+                {pair[0].label}
+              </div>
+              <div className="flex-1 min-w-0 p-2 md:p-2.5 text-muted-foreground break-words">{pair[0].value || "-"}</div>
+              {pair[1] ? (
+                <>
+                  <div className="w-1/5 min-w-[70px] bg-muted p-2 md:p-2.5 text-center font-medium text-foreground">
+                    {pair[1].label}
+                  </div>
+                  <div className="flex-1 min-w-0 p-2 md:p-2.5 text-muted-foreground break-words">{pair[1].value}</div>
+                </>
+              ) : (
+                <div className="flex-1 min-w-0"></div>
+              )}
             </div>
-            <div className="w-1/4 p-2 ">{pair[0].value || "-"}</div>
-            {pair[1] ? (
-              <>
-                <div className="w-1/5 bg-[#f1f3f4] p-2 text-center text-[black]">
-                  {pair[1].label}
-                </div>
-                <div className="w-1/4 p-2">{pair[1].value}</div>
-              </>
-            ) : (
-              <div className="w-1/2 p-2 text-center">{pair[0].value}</div>
-            )}
-          </div>
-        ))}
+          ))}
+      </div>
     </div>
   );
 }
@@ -384,17 +386,17 @@ function DetailContent({
 
   const markdownComponents: Components = {
     h1: ({ ...props }) => (
-      <h1 className="text-2xl font-bold mb-4" {...props} />
+      <h1 className="text-xl font-bold mb-4 text-foreground" {...props} />
     ),
     h2: ({ ...props }) => (
-      <h2 className="text-xl font-bold mb-3" {...props} />
+      <h2 className="text-lg font-semibold mb-3 text-foreground" {...props} />
     ),
     h3: ({ ...props }) => (
-      <h3 className="text-lg font-bold mb-2" {...props} />
+      <h3 className="text-base font-semibold mb-2 text-foreground" {...props} />
     ),
     p: ({ ...props }) => (
       <p
-        className="mb-3 text-gray-700 whitespace-pre-line break-words"
+        className="mb-3 text-muted-foreground whitespace-pre-line break-words leading-relaxed"
         {...props}
       />
     ),
@@ -405,7 +407,7 @@ function DetailContent({
     li: ({ ...props }) => <li className="mb-1" {...props} />,
     blockquote: ({ ...props }) => (
       <blockquote
-        className="border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-3"
+        className="border-l-2 border-muted-foreground/30 pl-4 italic text-muted-foreground mb-3"
         {...props}
       />
     ),
@@ -415,24 +417,24 @@ function DetailContent({
     }: { inline?: boolean } & React.HTMLAttributes<HTMLElement>) =>
       inline ? (
         <code
-          className="bg-gray-200  px-1 py-0.5 rounded  text-sm break-all max-w-full inline-block align-middle"
+          className="bg-muted px-1.5 py-0.5 rounded text-sm break-all max-w-full inline-block align-middle text-foreground"
           {...props}
         />
       ) : (
         <code
-          className="inline-block w-auto bg-gray-200 p-2 rounded text-sm mb-3 whitespace-pre-wrap break-all max-w-full "
+          className="inline-block w-auto bg-muted p-2 rounded text-sm mb-3 whitespace-pre-wrap break-all max-w-full text-foreground"
           {...props}
         />
       ),
     pre: ({ ...props }) => (
       <pre
-        className="inline-block w-auto bg-gray-200 p-3 rounded text-sm mb-3 whitespace-pre-wrap break-all max-w-full w-full"
+        className="inline-block w-auto bg-muted p-3 rounded text-sm mb-3 whitespace-pre-wrap break-all max-w-full w-full"
         {...props}
       />
     ),
     a: ({ ...props }) => (
       <a
-        className="text-blue-600 hover:text-blue-800 underline break-all"
+        className="text-primary hover:text-primary/90 underline break-all transition-colors"
         target="_blank"
         rel="noopener noreferrer"
         {...props}
@@ -441,51 +443,52 @@ function DetailContent({
     table: ({ ...props }) => (
       <div className="w-full overflow-x-auto mb-3">
         <table
-          className="border-collapse border border-gray-300 w-full min-w-[640px]"
+          className="border-collapse w-full min-w-[640px]"
           {...props}
         />
       </div>
     ),
     th: ({ ...props }) => (
       <th
-        className="border border-gray-300 px-4 py-2 bg-gray-100 font-bold align-top"
+        className="border-b border-border/40 px-4 py-2 bg-muted font-semibold align-top text-foreground"
         {...props}
       />
     ),
     td: ({ ...props }) => (
-      <td className="border border-gray-300 px-4 py-2 align-top" {...props} />
+      <td className="border-b border-border/40 px-4 py-2 align-top text-muted-foreground" {...props} />
     ),
     hr: ({ ...props }) => (
-      <hr className="my-6 border-gray-300" {...props} />
+      <hr className="my-6 border-border/30" {...props} />
     ),
   };
 
   return (
-    <div className="border border-gray-300 rounded-[5px] bg-white  px-5 py-4  h-full">
-      <p className="text-[20px] font-medium text-mb-4 text-grey-900 py-[11px] ">
+    <div className="bg-background px-4 md:px-5 py-4 h-full">
+      <p className="text-base md:text-lg font-semibold text-foreground mb-4 py-3">
         표준 문서
       </p>
-      <div className=" h-[650px]  ">
-        <div className="w-full flex space-x-2 ">
-          <div className="flex items-center justify-between w-full ">
-            <div className="flex items-center space-x-2 ">
-              <p className="border border-px inline-block px-4 py-1 border-gray-300 rounded-[5px] bg-gray-100 mb-4">
+      <div className="min-h-[400px] md:h-[650px]">
+        <div className="w-full flex flex-col sm:flex-row sm:space-x-2 gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="inline-block px-2 md:px-3 py-1.5 bg-muted text-xs md:text-sm text-muted-foreground">
                 토큰: {countToken(tokenCount ?? 0)}
               </p>
 
-              <p className="border border-px inline-block px-4 py-1 border-gray-300 rounded-[5px] bg-gray-100 mb-4">
+              <p className="inline-block px-2 md:px-3 py-1.5 bg-muted text-xs md:text-sm text-muted-foreground">
                 생성일: {transformDate(generatedAt)}
               </p>
             </div>
-            <div className="flex items-center   ">
+            <div className="flex items-center shrink-0">
               <Button
-                className={`group border border-px inline-block px-4 py-1 border-gray-300 cursor-pointer rounded-[5px] bg-gray-100 mb-4 hover:bg-gray-200 transition-colors text-black`}
+                variant="secondary"
+                className="group inline-block px-3 py-1.5 cursor-pointer hover:bg-muted/80 transition-colors bg-muted text-sm"
                 onClick={handleCopy}
                 disabled={!markdownText}
               >
                 <IoCopyOutline
-                  size={20}
-                  className="inline-block  mr-1 text-gray-500 cursor-pointer hover:text-gray-700 group-hover:text-gray-700"
+                  size={18}
+                  className="inline-block mr-1.5 text-muted-foreground group-hover:text-foreground transition-colors"
                 />
                 내용 복사
               </Button>
@@ -493,7 +496,7 @@ function DetailContent({
           </div>
         </div>
 
-        <div className="custom-scrollbar p-4 w-full max-h-[560px] h-full rounded-[5px] border border-gray-300 rounded-[5px] overflow-y-auto">
+        <div className="custom-scrollbar p-4 w-full max-h-[400px] md:max-h-[560px] h-full overflow-y-auto bg-muted/30">
           {markdownText ? (
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
               {markdownText}
@@ -501,14 +504,14 @@ function DetailContent({
           ) : markdownText === null ? (
             <div className="w-full h-full items-center text-center flex flex-col justify-center">
               <Button
-                className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 cursor-pointer"
+                className="bg-primary text-primary-foreground px-4 py-2 hover:bg-primary/90 cursor-pointer"
                 onClick={() => handleClick()}
               >
                 문서 요청하기
               </Button>
             </div>
           ) : (
-            <div className="text-gray-500 text-center py-8">
+            <div className="text-muted-foreground text-center py-8 text-sm">
               문서 내용을 불러오는 중입니다...
             </div>
           )}
@@ -524,15 +527,15 @@ function RecommendDocument({
   recommendations: RecommendationItem[];
 }) {
   return (
-    <div className="border border-gray-300 rounded-[5px] bg-white  px-5 py-4  h-full">
-      <p className="text-[20px] font-medium text-mb-4 text-grey-900 py-[11px] ">
+    <div className="bg-background px-4 md:px-5 py-4 h-full">
+      <p className="text-base md:text-lg font-semibold text-foreground mb-4 py-3">
         추천 문서
       </p>
-      <div className="grid grid-cols-2 grid-rows-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
         {recommendations?.map((item, index) => (
           <div
             key={index}
-            className="flex p-2 flex-col gap-y-1 hover:bg-gray-50 transition-colors transition-all duration-300 group cursor-pointer border border-gray-300 rounded-[5px] bg-white  "
+            className="flex p-2 flex-col gap-y-1 hover:bg-muted/50 transition-colors duration-200 group cursor-pointer bg-muted/30"
             onClick={() => {
               window.open(`/${item.listId}`, "_blank");
             }}
@@ -543,13 +546,13 @@ function RecommendDocument({
               </StatusBadge>
             </div>
             <div className="p-2">
-              <p className="text-[16px] group-hover:text-blue-500 font-medium text-grey-900">
+              <p className="text-base group-hover:text-primary font-medium text-foreground transition-colors">
                 {item.listTitle}
               </p>
               <div className="flex justify-between">
-                <p className="text-[14px] text-grey-500">{item.orgNm}</p>
-                <p className="text-[14px] text-grey-500 flex items-center gap-x-1">
-                  <span className="text-grey-500">유사도:</span>
+                <p className="text-sm text-muted-foreground">{item.orgNm}</p>
+                <p className="text-sm text-muted-foreground flex items-center gap-x-1">
+                  <span>유사도:</span>
                   <span className="font-semibold">
                     {(item.similarityScore * 100).toFixed(0)}%
                   </span>

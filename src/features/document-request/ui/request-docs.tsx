@@ -78,22 +78,24 @@ export function RequestDocks() {
         submitOnce();
       }}
     >
-      <p className="text-blue-500 text-[24px] font-bold mb-4">
+      <p className="text-primary text-lg md:text-xl font-bold mb-4">
         새로운 데이터가 있다면 요청하세요
       </p>
-      <div className="flex flex-col flex-row max-w-[600px] mx-auto gap-2 w-full">
+      <div className="flex flex-col gap-2 w-full">
         <Input
           placeholder="공공데이터포털 신규 페이지 URL을 입력하세요"
-          className="flex-1 px-[20px] py-[8px] border border-black border-1 rounded-[5px] bg-[#f1f3f4]"
+          className="w-full px-5 py-2 bg-muted"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <Button
-          type="submit"
-          className="sm:w-auto w-full bg-[#f1f3f4] text-black text-[16px] hover:bg-blue-500 hover:text-white border-black border-1 rounded-[5px]   "
-        >
-          제출
-        </Button>
+        <div className="flex justify-center">
+          <Button
+            type="submit"
+            className="bg-muted text-foreground text-base hover:bg-primary hover:text-primary-foreground transition-colors"
+          >
+            제출
+          </Button>
+        </div>
       </div>
     </form>
   );

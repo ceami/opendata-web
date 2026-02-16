@@ -50,9 +50,9 @@ import type { DataItem, PageData } from "@/entities/document";
 export const columns: ColumnDef<DataItem>[] = [
   {
     accessorKey: "listTitle",
-    header: () => <div className="text-left font-medium text-[18px]">이름</div>,
+    header: () => <div className="text-left font-medium text-base">이름</div>,
     cell: ({ row }) => (
-      <div className="text-left font-medium ">
+      <div className="text-left font-medium text-foreground">
         {linClamp(row.getValue("listTitle"), 27)}
       </div>
     ),
@@ -61,10 +61,10 @@ export const columns: ColumnDef<DataItem>[] = [
   {
     accessorKey: "orgNm",
     header: () => (
-      <div className="text-left font-medium text-[18px]">제공기관</div>
+      <div className="text-left font-medium text-base">제공기관</div>
     ),
     cell: ({ row }) => (
-      <div className=" line-clamp-1 text-left font-light">
+      <div className="line-clamp-1 text-left font-normal text-muted-foreground">
         {linClamp(row.getValue("orgNm"), 13)}
       </div>
     ),
@@ -72,7 +72,7 @@ export const columns: ColumnDef<DataItem>[] = [
   },
   {
     accessorKey: "dataType",
-    header: () => <div className="text-center font-medium text-[18px]">구분</div>,
+    header: () => <div className="text-center font-medium text-base">구분</div>,
     cell: ({ row }) => {
       const dataType = row.getValue("dataType") as string;
 
@@ -88,20 +88,20 @@ export const columns: ColumnDef<DataItem>[] = [
   },
   {
     accessorKey: "tokenCount",
-    header: () => <div className="text-center font-medium text-[18px]">토큰수</div>,
+    header: () => <div className="text-center font-medium text-base">토큰수</div>,
     cell: ({ row }) => {
       const tokenCount = row.getValue("tokenCount") as number;
       return (
-        <div className="text-center font-light">{countToken(tokenCount)}</div>
+        <div className="text-center font-normal text-muted-foreground">{countToken(tokenCount)}</div>
       );
     },
     size: 100,
   },
   {
     accessorKey: "updatedAt",
-    header: () => <div className="text-center font-medium text-[18px]">업데이트</div>,
+    header: () => <div className="text-center font-medium text-base">업데이트</div>,
     cell: ({ row }) => (
-      <div className="text-center text-[18px]  font-light">
+      <div className="text-center text-base font-normal text-muted-foreground">
         {humanizeKo(row.getValue("updatedAt"))}
       </div>
     ),
@@ -109,15 +109,15 @@ export const columns: ColumnDef<DataItem>[] = [
   },
   {
     accessorKey: "hasGeneratedDoc",
-    header: () => <div className="text-center font-medium text-[18px]">상태</div>,
+    header: () => <div className="text-center font-medium text-base">상태</div>,
     cell: ({ row }) => {
       const hasGeneratedDoc = row.getValue("hasGeneratedDoc") as boolean;
       return (
         <div className="text-center flex justify-center items-center">
           {hasGeneratedDoc ? (
-            <BiCheckCircle size={20} className=" text-green-500" />
+            <BiCheckCircle size={18} className="text-green-600" />
           ) : (
-            <BiErrorCircle size={20} className="text-red-500" />
+            <BiErrorCircle size={18} className="text-destructive" />
           )}
         </div>
       );
@@ -161,8 +161,8 @@ export function DocumentTable({ data }: DocumentTableProps) {
   });
 
   return (
-    <div className="w-full">
-      <div className="">
+    <div className="w-full overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 custom-scrollbar">
+      <div className="min-w-[640px]">
         <DropdownMenu>
           <DropdownMenuContent align="end">
             {table
@@ -195,9 +195,9 @@ export function DocumentTable({ data }: DocumentTableProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="">
-        <Table className="w-full ">
-          <TableHeader className="bg-gray-100 text-[18px] font-medium  ">
+      <div className="min-w-0">
+        <Table className="w-full min-w-[640px]">
+          <TableHeader className="bg-muted text-base font-medium">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -227,7 +227,7 @@ export function DocumentTable({ data }: DocumentTableProps) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="cursor-pointer hover:text-blue-500 text-black"
+                  className="cursor-pointer hover:text-primary text-foreground transition-colors"
                   onClick={() => {
                     router.push(`/${row.original.listId}`);
                   }}
@@ -240,7 +240,7 @@ export function DocumentTable({ data }: DocumentTableProps) {
                         minWidth: `${cell.column.getSize()}px`,
                         maxWidth: `${cell.column.getSize()}px`,
                       }}
-                      className="py-3 px-2 text-[18px] "
+                      className="py-3 px-2 text-base"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -277,7 +277,7 @@ export function DocumentTableSkeleton() {
       </div>
       <div className="">
         <Table className="w-full ">
-          <TableHeader className="bg-gray-100 text-[18px] font-medium  ">
+          <TableHeader className="bg-muted text-base font-medium">
             <TableRow>
               {columns.map((col, index) => (
                 <TableHead

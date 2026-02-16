@@ -79,9 +79,9 @@ export function DocumentPagination({
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-3 md:gap-4 py-4 overflow-x-auto">
       <Pagination>
-        <PaginationContent>
+        <PaginationContent className="flex-wrap justify-center gap-0.5 md:gap-1">
           <PaginationItem>
             <PaginationLink
               href="#"
@@ -90,11 +90,12 @@ export function DocumentPagination({
                 const target = Math.max(1, currentPage - 10);
                 handlePageChange(target);
               }}
-              className={
+              className={`text-xs md:text-sm ${
                 currentPage <= 10 ? "pointer-events-none opacity-50" : ""
-              }
+              }`}
             >
-              « 10
+              <span className="hidden sm:inline">« 10</span>
+              <span className="sm:hidden">«</span>
             </PaginationLink>
           </PaginationItem>
           <PaginationItem>
@@ -106,11 +107,11 @@ export function DocumentPagination({
                 e.preventDefault();
                 handlePageChange(currentPage - 1);
               }}
-              className={
+              className={`text-xs md:text-sm ${
                 currentPage === 1 ? "pointer-events-none opacity-50" : ""
-              }
+              }`}
             >
-              ‹ 이전
+              ‹ <span className="hidden sm:inline">이전</span>
             </PaginationLink>
           </PaginationItem>
 
@@ -125,13 +126,13 @@ export function DocumentPagination({
                 e.preventDefault();
                 handlePageChange(currentPage + 1);
               }}
-              className={
+              className={`text-xs md:text-sm ${
                 currentPage === totalPages
                   ? "pointer-events-none opacity-50"
                   : ""
-              }
+              }`}
             >
-              다음 ›
+              <span className="hidden sm:inline">다음</span> ›
             </PaginationLink>
           </PaginationItem>
           <PaginationItem>
@@ -142,13 +143,13 @@ export function DocumentPagination({
                 const target = Math.min(totalPages, currentPage + 10);
                 handlePageChange(target);
               }}
-              className={
+              className={`text-xs md:text-sm ${
                 currentPage + 10 > totalPages
                   ? "pointer-events-none opacity-50"
                   : ""
-              }
+              }`}
             >
-              10 »
+              <span className="hidden sm:inline">10 </span>»
             </PaginationLink>
           </PaginationItem>
         </PaginationContent>

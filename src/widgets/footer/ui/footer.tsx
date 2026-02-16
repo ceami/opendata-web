@@ -21,13 +21,13 @@ export function Footer() {
   const router = useRouter();
 
   return (
-    <div className="bg-white  fixed bottom-0 w-full h-[60px]">
-      <div className="flex justify-between max-w-[1200px] mx-auto h-full">
-        <p className=" flex items-center  text-[18px] font-light">
-          © 2025 OpenDataMCP is an ezrnd project
+    <div className="bg-background fixed bottom-0 w-full h-[52px] md:h-[60px] border-t border-border/40">
+      <div className="flex justify-between items-center max-w-[var(--content-max-width)] mx-auto h-full px-4">
+        <p className="flex items-center text-xs md:text-sm font-normal text-muted-foreground truncate max-w-[60%]">
+          © 2025 OpenData MCP is an ezrnd project
         </p>
         <button
-          className="px-2  cursor-pointer hover:text-blue-600 transition-colors duration-300"
+          className="px-2 cursor-pointer text-muted-foreground hover:text-primary transition-colors duration-200 text-xs md:text-sm shrink-0"
           onClick={() => router.push("/licenses")}
         >
           Licenses

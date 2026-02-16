@@ -16,24 +16,26 @@
 import React from "react";
 import Script from "next/script";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { Header } from "@/widgets/header";
 import { Footer } from "@/widgets/footer";
-import { FloatingBadge } from "@/widgets/floating-badge";
 import { QueryProvider } from "./provider/query-provider";
 import { DataTableProvider } from "@/features/document-list";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
-  title: "OpenDataMCP",
+  title: "OpenData MCP",
   description:
     "공공데이터포털 데이터를 검색·정렬·페이지네이션으로 탐색하고, 표준 문서(Markdown)를 열람·복사하며, 신규 문서 생성을 요청할 수 있는 OpenDataMCP 웹 클라이언트",
   icons: {
     icon: "/logo.png",
   },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
@@ -45,7 +47,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className={inter.className}>
+      <body suppressHydrationWarning>
         {GA_ID ? (
           <>
             <Script
@@ -65,19 +67,12 @@ export default function RootLayout({
 
         <QueryProvider>
           <DataTableProvider>
-            <div
-              className="min-h-screen flex flex-col"
-              style={{
-                backgroundColor: "#ffffff",
-                backgroundImage:
-                  "linear-gradient(to bottom, #D8E2E7 0px, #ffffff 200px)",
-                backgroundRepeat: "no-repeat",
-              }}
-            >
+            <div className="min-h-screen flex flex-col bg-background">
               <Header />
-              <main className="flex-1 pt-10 ">{children}</main>
+              <main className="flex-1 pt-6 md:pt-10 px-4 md:px-6 pb-24 md:pb-0">
+              {children}
+            </main>
               <Footer />
-              <FloatingBadge />
             </div>
           </DataTableProvider>
         </QueryProvider>

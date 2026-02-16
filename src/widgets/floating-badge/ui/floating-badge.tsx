@@ -19,13 +19,13 @@ import Image from "next/image";
 
 export function FloatingBadge() {
   return (
-    <div className="fixed bottom-10 right-10 z-50">
+    <div className="fixed bottom-20 md:bottom-10 right-4 md:right-10 z-40 pointer-events-none">
       <Image
         src="/badge.png"
         alt="badge"
-        width={200}
-        height={200}
-        className="object-contain w-[200px]"
+        width={120}
+        height={120}
+        className="object-contain w-[100px] md:w-[140px] opacity-90"
       />
     </div>
   );

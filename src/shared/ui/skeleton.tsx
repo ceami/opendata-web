@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use client";
+import * as React from "react"
+import { cn } from "@/shared/lib/utils"
 
-import { DocumentTabContent } from "@/features/document-list";
-
-export function DocumentList() {
+function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className="w-full min-h-[calc(100vh-300px)] h-full mx-auto max-w-[var(--content-max-width)]">
-      <div id="tabContent" className="">
-        <DocumentTabContent />
-      </div>
-    </div>
-  );
+    <div
+      data-slot="skeleton"
+      className={cn("bg-accent animate-pulse rounded-md", className)}
+      {...props}
+    />
+  )
 }
+
+export { Skeleton }

@@ -32,11 +32,34 @@ import { Label } from "@/shared/ui/label";
 import toast from "react-hot-toast";
 
 interface ContactModalProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function ContactModal({ children }: ContactModalProps) {
-  const [open, setOpen] = React.useState(false);
+export function ContactModal({
+  children,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+}: ContactModalProps) {
+  const [internalOpen, setInternalOpen] = React.useState(false);
+
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = React.useCallback(
+    (next: boolean) => {
+      if (!isControlled) setInternalOpen(next);
+      controlledOnOpenChange?.(next);
+    },
+    [isControlled, controlledOnOpenChange]
+  );
+
+  const handleOpenChange = React.useCallback(
+    (next: boolean) => {
+      setOpen(next);
+    },
+    [setOpen]
+  );
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -86,9 +109,11 @@ export function ContactModal({ children }: ContactModalProps) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[480px]">
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      {children != null ? (
+        <DialogTrigger asChild>{children}</DialogTrigger>
+      ) : null}
+      <DialogContent className="sm:max-w-[520px]">
         <DialogHeader>
           <DialogTitle className="text-xl">문의하기</DialogTitle>
           <DialogDescription>
@@ -138,7 +163,7 @@ export function ContactModal({ children }: ContactModalProps) {
             <Button
               type="submit"
               disabled={isSubmitting || !title.trim() || !content.trim()}
-              className="bg-[#1565c0] text-white hover:bg-[#1565c0]/90"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
             >
               {isSubmitting ? "전송 중..." : "문의 보내기"}
             </Button>

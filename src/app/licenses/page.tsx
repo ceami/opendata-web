@@ -77,7 +77,7 @@ export default async function LicensesPage() {
   const { frontendLicenses, backendLicenses } = await getLicensesData();
 
   return (
-    <div className="w-full h-full my-20 max-w-[1200px] mx-auto space-y-10">
+    <div className="w-full h-full my-20 max-w-[var(--content-max-width)] mx-auto space-y-10">
       <LicensesView
         frontendLicenses={frontendLicenses}
         backendLicenses={backendLicenses}

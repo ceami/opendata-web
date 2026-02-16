@@ -19,7 +19,7 @@ import { RequestDocks, RequestGuide } from "@/features/document-request";
 
 export function RequestView() {
   return (
-    <div className="w-full h-full  max-w-[1200px] mx-auto space-y-10">
+    <div className="w-full h-full max-w-[var(--content-max-width)] mx-auto space-y-8 md:space-y-10 px-0">
       <RequestDocks />
       <RequestGuide />
     </div>

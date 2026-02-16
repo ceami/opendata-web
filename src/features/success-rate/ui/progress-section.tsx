@@ -26,13 +26,13 @@ export function ProgressSection() {
   });
 
   return (
-    <div className="w-full h-[100px] bg-white border-1 border-gray-400 rounded-[5px] flex flex-col px-[24px] py-[16px] justify-center">
+    <div className="w-full min-h-[80px] md:min-h-[100px] bg-muted/50 flex flex-col px-4 md:px-6 py-3 md:py-4 justify-center">
       <div className="flex flex-col justify-between h-full space-y-0.5">
-        <div className="flex text-gray-900 items-center bg-white justify-between w-full px-2">
-          <span className="text-[18px] font-semibold   ">
+        <div className="flex text-foreground items-center justify-between w-full px-1 md:px-2">
+          <span className="text-sm md:text-base font-semibold">
             데이터 표준문서 제공
           </span>
-          <span className=" text-[18px] font-semibold">
+          <span className="text-sm md:text-base font-semibold text-primary">
             {data?.successRate}%
           </span>
         </div>
@@ -40,9 +40,8 @@ export function ProgressSection() {
           <Progress value={data?.successRate} className="" />
         </div>
 
-        <p className="text-gray-500 px-2 text-right text-[15px] ">
-          *공공데이터포털에서 제공하는 데이터 중 통합문서가 생성된 데이터의
-          비율임
+        <p className="text-muted-foreground px-1 md:px-2 text-right text-xs md:text-sm">
+          ※공공데이터포털에서 제공하는 데이터 중 통합문서가 생성된 데이터의 비율임
         </p>
       </div>
     </div>

@@ -55,41 +55,41 @@ export function DocumentTabContent() {
   };
 
   return (
-    <div className="flex w-full  mt-7 max-w-[1200px] flex-col gap-6">
-      <Tabs value={currentTab} onValueChange={handleTabChange}>
-        <TabsList className="flex justify-between w-full">
-          <div className="flex justify-start ">
+    <div className="flex w-full mt-4 md:mt-7 max-w-[var(--content-max-width)] flex-col gap-4 md:gap-6 px-0">
+      <Tabs value={currentTab} onValueChange={handleTabChange} className="gap-4 md:gap-6">
+        <TabsList className="flex flex-col md:flex-row md:justify-between w-full gap-4 md:gap-0 h-auto py-2">
+          <div className="flex justify-start">
             <TabsTrigger
               value="popular"
-              className="relative text-[18px] font-semibold transition-colors duration-200 relative"
+              className="relative text-base font-semibold transition-colors duration-200"
             >
               인기순
               <div
                 className={cn(
-                  "w-full flex justify-center  bg-black transition-colors duration-200 absolute bottom-[1px] ",
-                  currentTab === "popular" ? "h-[3px]" : " h-[1px]"
+                  "w-full flex justify-center bg-foreground transition-colors duration-200 absolute bottom-[1px]",
+                  currentTab === "popular" ? "h-[3px]" : "h-[1px]"
                 )}
               />
             </TabsTrigger>
             <TabsTrigger
               value="trending"
-              className="text-[18px] font-semibold transition-colors duration-200 relative"
+              className="text-base font-semibold transition-colors duration-200 relative"
             >
               최신순
               <div
                 className={cn(
-                  "w-full flex justify-center  bg-black transition-colors duration-200 absolute bottom-[1px] ",
-                  currentTab === "trending" ? "h-[3px]" : " h-[1px]"
+                  "w-full flex justify-center bg-foreground transition-colors duration-200 absolute bottom-[1px]",
+                  currentTab === "trending" ? "h-[3px]" : "h-[1px]"
                 )}
               />
             </TabsTrigger>
           </div>
 
-          <div className="relative flex justify-end w-1/3 items-center">
+          <div className="relative flex justify-end w-full md:w-1/3 items-center">
             <Input
-              type="email"
+              type="search"
               placeholder="데이터를 검색해보세요"
-              className="rounded-[12px] border-px border-gray-300 bg-[#f1f3f4]"
+              className="bg-muted placeholder:text-muted-foreground"
               value={query}
               onChange={(e) => {
                 handleQueryChange(e.target.value);
@@ -101,14 +101,14 @@ export function DocumentTabContent() {
               }}
             />
             <RxMagnifyingGlass
-              className=" text-black absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-transparent"
+              className="text-muted-foreground hover:text-foreground absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-transparent cursor-pointer transition-colors"
               size={20}
               onClick={() => refetch()}
             />
           </div>
         </TabsList>
-        <TabsContent value="popular" className="w-full max-w-[1200px] w-full ">
-          <div className="w-full bg-white">
+        <TabsContent value="popular" className="w-full max-w-[var(--content-max-width)] mt-0 pt-4">
+          <div className="w-full bg-background overflow-hidden">
             {isLoading ? (
               <DocumentTableSkeleton />
             ) : (
@@ -116,8 +116,8 @@ export function DocumentTabContent() {
             )}
           </div>
         </TabsContent>
-        <TabsContent value="trending" className="w-full max-w-[1200px] w-full">
-          <div className="w-full bg-white">
+        <TabsContent value="trending" className="w-full max-w-[var(--content-max-width)] mt-0 pt-4">
+          <div className="w-full bg-background overflow-hidden">
             {isLoading ? (
               <DocumentTableSkeleton />
             ) : (

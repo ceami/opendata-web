@@ -23,7 +23,7 @@ export const StatusBadge = ({
 }) => {
   return (
     <span
-      className={`inline-flex items-center min-w-[70px] justify-center py-1 rounded-[5px] text-xs font-light ${
+      className={`inline-flex items-center min-w-[70px] justify-center py-1 text-xs font-medium ${
         getVariantStyles(variant).className
       }`}
     >
@@ -38,18 +38,18 @@ export const getVariantStyles = (variant: string) => {
       return {
         title: "오픈 API",
         className:
-          "bg-[#009689] border-[#00ddca] text-white border rounded-[5px]",
+          "bg-emerald-600/90 text-white",
       };
     case "FILE":
       return {
         title: "파일 데이터",
         className:
-          "bg-[#FE9A00] border-[#FFC66F] text-white border rounded-[5px]",
+          "bg-amber-500/90 text-white",
       };
     default:
       return {
         title: "기본",
-        className: "bg-gray-100 text-gray-800",
+        className: "bg-muted text-muted-foreground",
       };
   }
 };

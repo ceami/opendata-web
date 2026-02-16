@@ -17,17 +17,17 @@
 export function RequestGuide() {
   return (
     <div className="">
-      <h2 className="text-[20px] font-medium mb-4 text-gray-800">
-        OpenDataMCP 데이터 요청 가이드라인
+      <h2 className="text-base md:text-lg font-semibold mb-4 text-foreground">
+        OpenData MCP 데이터 요청 가이드라인
       </h2>
 
-      <div className="space-y-8 text-gray-800">
+      <div className="space-y-8 text-foreground">
         <section className="">
-          <h3 className="text-lg  ">1. 데이터 요청 유형</h3>
-          <ol className=" ml-1 space-y-3">
+          <h3 className="text-base md:text-lg">1. 데이터 요청 유형</h3>
+          <ol className="ml-1 space-y-3 text-sm md:text-base">
             <li>
               <p className="">(1) 기존 데이터 요청</p>
-              <ul className="list-disc ml-7 text-gray-700">
+              <ul className="list-disc ml-4 md:ml-7 text-muted-foreground">
                 <li>
                   공공데이터포털에 등록된 데이터셋 중 검색을 통해 확인 가능한
                   경우
@@ -36,7 +36,7 @@ export function RequestGuide() {
             </li>
             <li>
               <p className="">(2) 신규 데이터 요청</p>
-              <ul className="list-disc ml-7 text-gray-700">
+              <ul className="list-disc ml-4 md:ml-7 text-muted-foreground">
                 <li>검색 시 해당 데이터셋이 존재하지 않는 경우</li>
                 <li>
                   공공데이터포털에 존재하지만, 본 사이트에 등록되지 않은
@@ -48,11 +48,11 @@ export function RequestGuide() {
         </section>
 
         <section>
-          <h3 className="text-lg  ">2. 데이터 요청 우선순위</h3>
-          <ol className="ml-1 space-y-4">
+          <h3 className="text-base md:text-lg">2. 데이터 요청 우선순위</h3>
+          <ol className="ml-1 space-y-4 text-sm md:text-base">
             <li>
               <p className="">(1) 공공데이터포털(data.go.kr)</p>
-              <ul className="list-disc ml-7 text-gray-700">
+              <ul className="list-disc ml-4 md:ml-7 text-muted-foreground">
                 <li>
                   국가 및 지방자치단체, 공공기관이 제공하는 공식 오픈 데이터
                 </li>
@@ -61,7 +61,7 @@ export function RequestGuide() {
             </li>
             <li>
               <p className="">(2) 공공데이터포털 연계 사이트</p>
-              <ul className="list-disc ml-7 text-gray-700">
+              <ul className="list-disc ml-4 md:ml-7 text-muted-foreground">
                 <li>
                   공공데이터포털 API 또는 데이터셋 연계를 통해 자료를 제공하는
                   기관 웹사이트
@@ -74,7 +74,7 @@ export function RequestGuide() {
             </li>
             <li>
               <p className="">(3) 외부 사이트</p>
-              <ul className="list-disc ml-7 text-gray-700">
+              <ul className="list-disc ml-4 md:ml-7 text-muted-foreground">
                 <li>
                   공공데이터포털과 직접 연계되지 않은 민간/기관 웹사이트 (예: AI
                   Hub, KOSIS 등)
@@ -88,8 +88,8 @@ export function RequestGuide() {
         </section>
 
         <section>
-          <h3 className="text-lg  ">3. 검토 및 처리</h3>
-          <ul className="list-disc ml-7 text-gray-700">
+          <h3 className="text-base md:text-lg">3. 검토 및 처리</h3>
+          <ul className="list-disc ml-4 md:ml-7 text-muted-foreground text-sm md:text-base">
             <li>우선순위에 따라 담당 부서에서 검토 후 처리 결과 안내</li>
           </ul>
         </section>

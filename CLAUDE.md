@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-이 프로젝트는 공공데이터포털의 API 또는 데이터셋 문서를 파싱하여 LLM이 이해하기 쉬운 형태로 변환해서 사용자가 쉽게 사용할 수 있는 MCP(model context protocol) 웹 페이지 입니다. 
+이 프로젝트는 공공데이터포털()의 API 또는 데이터셋 문서를 파싱하여 LLM이 이해하기 쉬운 형태로 변환해서 사용자가 쉽게 사용할 수 있는 MCP(model context protocol) 웹 페이지 입니다. 
 
 ---
 
