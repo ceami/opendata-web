@@ -18,20 +18,6 @@ services:
       dockerfile: Dockerfile
       context: .
     image: opendata-web
-    container_name: opendata-web
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.opendata-web.rule=Host(`${TRAEFIK_HOST_NAME:-localhost}`)"
-      - "traefik.http.routers.opendata-web.entrypoints=websecure"
-      - "traefik.http.routers.opendata-web.tls.certresolver=cf"
-      - "traefik.http.routers.opendata-web.middlewares=TmNoAiBotsMiddleware@file"
-      - "traefik.http.services.opendata-web.loadbalancer.server.port=3000"
-    expose:
-      - 3000
+    ports:
+      - 10005:3000
     restart: unless-stopped
-    networks:
-      - traefik-net
-
-networks:
-  traefik-net:
-    external: true
