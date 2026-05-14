@@ -21,7 +21,7 @@ export function GiscusComments() {
   return (
     <Giscus
       id="giscus-comments"
-      repo="ceami/opendata-web"
+      repo="aeriis-kr/opendata-web"
       repoId="R_kgDOPb0Zug"
       category="Q&A"
       categoryId="DIC_kwDOPb0Zus4Cwa2v"

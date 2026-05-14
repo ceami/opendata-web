@@ -40,11 +40,7 @@ export const viewport = {
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
       <body suppressHydrationWarning>
@@ -69,9 +65,7 @@ export default function RootLayout({
           <DataTableProvider>
             <div className="min-h-screen flex flex-col bg-background">
               <Header />
-              <main className="flex-1 pt-6 md:pt-10 px-4 md:px-6 pb-24 md:pb-0">
-              {children}
-            </main>
+              <main className="flex-1 pt-6 md:pt-10 px-4 md:px-6 pb-24 md:pb-0">{children}</main>
               <Footer />
             </div>
           </DataTableProvider>
